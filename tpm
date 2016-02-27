@@ -107,9 +107,15 @@ if [ $# -gt 2 ]; then
 fi
 
 case "${1}" in
-  "show")   show   "${2}" ;;
-  "insert") insert "${2}" ;;
-  *) abort "USAGE: tpm COMMAND ENTRY" ;;
+  "show")
+    show    "${2}"
+    ;;
+  "insert")
+    insert  "${2}"
+    ;;
+  *)
+    abort   "USAGE: tpm COMMAND ENTRY"
+    ;;
 esac
 
 # vim: et:sw=2:sts=2
