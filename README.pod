@@ -70,6 +70,7 @@ Copy your 'system/root' password to the clipboard using xclip(1):
 	$ tpm show system/root | tr -d '\n' | xclip
 
 List all entries of the group 'system':
+
 	$ tpm list system
 
 =head1 SEE ALSO
