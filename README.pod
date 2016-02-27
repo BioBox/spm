@@ -4,7 +4,7 @@ tpm - tiny password manager
 
 =head1 SYNOPSIS
 
-B<tpm> [I<COMMAND> [I<ENTRY>]]
+B<tpm> I<COMMAND> [I<ENTRY>|I<GROUP>]
 
 =head1 DESCRIPTION
 
@@ -19,8 +19,9 @@ I<show> and supplying one entry as a target. If I<insert> is specified
 as a command tpm will create a new entry and prompt for the
 corresponding password. If you specify I<show> as a command tpm will
 write the password for the given entry to standard output. Specifying
-I<help> as command without entry will show how to use tpm. Running tpm
-without any commands lists all existing entries in a tree structure.
+I<help> as command without entry will show how to use tpm. The command
+I<list> will list all entries in the group I<group>. If I<group> is
+omitted, all entries of all groups will be listed.
 
 =head1 ENVIRONMENT
 
@@ -67,6 +68,9 @@ Write your 'system/root' password to standard output:
 Copy your 'system/root' password to the clipboard using xclip(1):
 
 	$ tpm show system/root | tr -d '\n' | xclip
+
+List all entries of the group 'system':
+	$ tpm list system
 
 =head1 SEE ALSO
 

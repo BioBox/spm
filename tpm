@@ -53,12 +53,18 @@ readpw() {
 }
 
 usage() {
-  echo "USAGE: tpm (show|insert|help) [ENTRY]"
+  echo "USAGE: tpm (show|insert|list|help) [ENTRY|GROUP]"
 }
 
-all() {
+list() {
   [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
-  tree --prune --noreport "${STORE_DIR}"
+
+  echo "${1}"
+  if [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ]; then
+      abort "The specified group doesn't exist. See 'tpm list'."
+  fi
+
+  tree --prune --noreport "${STORE_DIR}/${1}"
   echo
 }
 
@@ -123,11 +129,11 @@ case "${1}" in
   "insert")
     insert  "${2}"
     ;;
+  "list")
+    list    "${2}"
+    ;;
   "help")
     usage
-    ;;
-  "")
-    all
     ;;
   *)
     abort   "You didn't specify a valid command. See 'tpm help'."
