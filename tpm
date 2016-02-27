@@ -60,9 +60,8 @@ list() {
   [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
   echo "${1}"
-  if [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ]; then
-      abort "The specified group doesn't exist. See 'tpm list'."
-  fi
+  [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
+    && abort "The specified group doesn't exist. See 'tpm list'."
 
   tree --prune --noreport "${STORE_DIR}/${1}"
   echo
@@ -76,13 +75,9 @@ show() {
   entry_name="${1}"
   entry_path="${STORE_DIR}/${entry_name}.gpg"
 
-  if [ -z "${entry_name}" ]; then
-    abort "USAGE: tpm show ENTRY"
-  fi
+  [ -z "${entry_name}" ] && abort "USAGE: tpm show ENTRY"
 
-  if [ ! -e "${entry_path}" ]; then
-    abort "The requested entry doesn't exist."
-  fi
+  [ -e "${entry_path}" ] || abort "The requested entry doesn't exist."
 
   gpg2 ${GPG_OPTS} --decrypt "${entry_path}"
 }
@@ -91,23 +86,16 @@ insert() {
   entry_name="${1}"
   entry_path="${STORE_DIR}/${entry_name}.gpg"
 
-  if [ -z "${entry_name}" ]; then
-    abort "USAGE: tpm insert ENTRY"
-  fi
+  [ -z "${entry_name}" ] && abort "USAGE: tpm insert ENTRY"
 
-  if [ -e "${entry_path}" ]; then
-    abort "This entry already exists, please remove it first."
-  fi
+  [ -e "${entry_path}" ] \
+    && abort "This entry already exists, please remove it first."
 
   password=""
   readpw "Password for '${entry_name}': " password
-  if [ -t 0 ]; then
-    printf "\n"
-  fi
+  [ -t 0 ] && printf "\n"
 
-  if [ -z "${password}" ]; then
-    abort "You didn't specify a password."
-  fi
+  [ -z "${password}" ] && abort "You didn't specify a password."
 
   mkdir -p "$(dirname "${entry_path}")"
   printf '%s\n' "${password}" | gpg2 ${GPG_OPTS} \
@@ -118,9 +106,7 @@ insert() {
 # Parse input
 ##
 
-if [ $# -gt 2 ]; then
-  abort "tpm doesn't accept more than two arguments."
-fi
+[ $# -gt 2 ] && abort "tpm doesn't accept more than two arguments."
 
 case "${1}" in
   "show")
