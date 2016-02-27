@@ -56,6 +56,12 @@ usage() {
   echo "USAGE: tpm (show|insert|help) [ENTRY]"
 }
 
+all() {
+  [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
+  tree --prune --noreport "${STORE_DIR}"
+  echo
+}
+
 ##
 # Commands
 ##
@@ -120,8 +126,11 @@ case "${1}" in
   "help")
     usage
     ;;
+  "")
+    all
+    ;;
   *)
-    abort   "You didn't specify a command. See 'tpm help'."
+    abort   "You didn't specify a valid command. See 'tpm help'."
     ;;
 esac
 

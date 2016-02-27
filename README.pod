@@ -4,7 +4,7 @@ tpm - tiny password manager
 
 =head1 SYNOPSIS
 
-B<tpm> I<COMMAND> [I<ENTRY>]
+B<tpm> [I<COMMAND> [I<ENTRY>]]
 
 =head1 DESCRIPTION
 
@@ -19,7 +19,8 @@ I<show> and supplying one entry as a target. If I<insert> is specified
 as a command tpm will create a new entry and prompt for the
 corresponding password. If you specify I<show> as a command tpm will
 write the password for the given entry to standard output. Specifying
-I<help> as command without entry will show how to use tpm.
+I<help> as command without entry will show how to use tpm. Running tpm
+without any commands lists all existing entries in a tree structure.
 
 =head1 ENVIRONMENT
 
