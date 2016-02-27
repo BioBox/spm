@@ -59,7 +59,6 @@ usage() {
 list() {
   [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
-  echo "${1}"
   [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
     && abort "The specified group doesn't exist. See 'tpm list'."
 
