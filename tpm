@@ -53,7 +53,7 @@ readpw() {
 }
 
 usage() {
-  echo "USAGE: tpm (show|insert|list|help) [ENTRY|GROUP]"
+  echo "USAGE: tpm show|insert|list|help [ENTRY|GROUP]"
 }
 
 list() {
