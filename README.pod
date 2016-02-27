@@ -4,7 +4,7 @@ tpm - tiny password manager
 
 =head1 SYNOPSIS
 
-B<tpm> I<COMMAND> I<ENTRY>
+B<tpm> I<COMMAND> [I<ENTRY>]
 
 =head1 DESCRIPTION
 
@@ -18,7 +18,8 @@ Invoking tpm consists of specifying a command either I<insert> or
 I<show> and supplying one entry as a target. If I<insert> is specified
 as a command tpm will create a new entry and prompt for the
 corresponding password. If you specify I<show> as a command tpm will
-write the password for the given entry to standard output.
+write the password for the given entry to standard output. Specifying
+I<help> as command without entry will show how to use tpm.
 
 =head1 ENVIRONMENT
 
