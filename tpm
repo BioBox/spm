@@ -94,16 +94,10 @@ insert() {
 [ $# -gt 2 ] && abort "tpm doesn't accept more than two arguments."
 
 case "${1}" in
-  "show")
-    show    "${2}"
+  'show'|'insert'|'list')
+    ${1}    "${2}"
     ;;
-  "insert")
-    insert  "${2}"
-    ;;
-  "list")
-    list    "${2}"
-    ;;
-  "help")
+  'help')
     usage
     ;;
   *)
