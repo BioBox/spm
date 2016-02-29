@@ -85,12 +85,20 @@ insert() {
     | gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
+remove() {
+  [ -z "${1}" ] && abort "USAGE: tpm remove ENTRY"
+
+  [ -e "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
+
+  rm -i "${STORE_DIR}"/"${1}".gpg && echo "${1} has been removed."
+}
+
 ### Parse input ###
 
 [ $# -gt 2 ] && abort "tpm doesn't accept more than two arguments."
 
 case "${1}" in
-  'show'|'insert'|'list')
+  'show'|'insert'|'list'|'remove')
     ${1}    "${2}"
     ;;
   'help')
