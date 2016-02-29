@@ -71,34 +71,28 @@ list() {
 ##
 
 show() {
-  entry_name="${1}"
-  entry_path="${STORE_DIR}/${entry_name}.gpg"
+  [ -z "${1}" ] && abort "USAGE: tpm show ENTRY"
 
-  [ -z "${entry_name}" ] && abort "USAGE: tpm show ENTRY"
+  [ -e "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
 
-  [ -e "${entry_path}" ] || abort "The requested entry doesn't exist."
-
-  gpg2 ${GPG_OPTS} --decrypt "${entry_path}"
+  gpg2 ${GPG_OPTS} --decrypt "${STORE_DIR}"/"${1}".gpg
 }
 
 insert() {
-  entry_name="${1}"
-  entry_path="${STORE_DIR}/${entry_name}.gpg"
+  [ -z "${1}" ] && abort "USAGE: tpm insert ENTRY"
 
-  [ -z "${entry_name}" ] && abort "USAGE: tpm insert ENTRY"
-
-  [ -e "${entry_path}" ] \
+  [ -e "${STORE_DIR}"/"${1}".gpg ] \
     && abort "This entry already exists, please remove it first."
 
   password=""
-  readpw "Password for '${entry_name}': " password
+  readpw "Password for '${1}': " password
   [ -t 0 ] && printf "\n"
 
   [ -z "${password}" ] && abort "You didn't specify a password."
 
-  mkdir -p "$(dirname "${entry_path}")"
-  printf '%s\n' "${password}" | gpg2 ${GPG_OPTS} \
-    --encrypt --output "${entry_path}"
+  mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
+  printf '%s\n' "${password}" \
+    | gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
 ##
