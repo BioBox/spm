@@ -29,7 +29,7 @@ omitted, all entries of all groups will be listed.
 
 =item B<PASSWORD_STORE_DIR>
 
-The storage directory (default: ~/.password-store).
+The storage directory (default: ~/.tpm).
 
 =item B<PASSWORD_STORE_KEY>
 
@@ -41,11 +41,11 @@ GPG key to encrypt files with (default: self).
 
 =over 4
 
-=item I<~/.password-store>
+=item I<~/.tpm>
 
 The default storage directory.
 
-=item I<~/.password-store/.gpg-id>
+=item I<~/.tpm/.gpg-id>
 
 Provided for compatibility with pass(1).
 
