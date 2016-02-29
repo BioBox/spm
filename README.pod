@@ -45,10 +45,6 @@ GPG key to encrypt files with (default: self).
 
 The default storage directory.
 
-=item I<~/.tpm/.gpg-id>
-
-Provided for compatibility with pass(1).
-
 =back
 
 =head1 EXAMPLES
@@ -75,4 +71,4 @@ List all entries of the group 'system':
 
 =head1 SEE ALSO
 
-gpg2(1), pass(1), pwgen(1), xclip(1)
+gpg2(1), pwgen(1), xclip(1)
