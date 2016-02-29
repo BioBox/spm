@@ -48,25 +48,7 @@ usage() {
   echo "USAGE: tpm show|insert|list|help [ENTRY|GROUP]"
 }
 
-list() {
-  [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
-
-  [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
-    && abort "The specified group doesn't exist. See 'tpm list'."
-
-  tree --noreport -- "${STORE_DIR}/${1}"
-  echo
-}
-
 ### Commands ###
-
-show() {
-  [ -z "${1}" ] && abort "USAGE: tpm show ENTRY"
-
-  [ -e "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
-
-  gpg2 ${GPG_OPTS} --decrypt "${STORE_DIR}"/"${1}".gpg
-}
 
 insert() {
   [ -z "${1}" ] && abort "USAGE: tpm insert ENTRY"
@@ -85,6 +67,16 @@ insert() {
     | gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
+list() {
+  [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
+
+  [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
+    && abort "The specified group doesn't exist. See 'tpm list'."
+
+  tree --noreport -- "${STORE_DIR}/${1}"
+  echo
+}
+
 remove() {
   [ -z "${1}" ] && abort "USAGE: tpm remove ENTRY"
 
@@ -93,12 +85,20 @@ remove() {
   rm -i "${STORE_DIR}"/"${1}".gpg && echo "${1} has been removed."
 }
 
+show() {
+  [ -z "${1}" ] && abort "USAGE: tpm show ENTRY"
+
+  [ -e "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
+
+  gpg2 ${GPG_OPTS} --decrypt "${STORE_DIR}"/"${1}".gpg
+}
+
 ### Parse input ###
 
 [ $# -gt 2 ] && abort "tpm doesn't accept more than two arguments."
 
 case "${1}" in
-  'show'|'insert'|'list'|'remove')
+  'insert'|'list'|'remove'|'show')
     ${1}    "${2}"
     ;;
   'help')
