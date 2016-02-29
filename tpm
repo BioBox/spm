@@ -16,9 +16,7 @@
 
 umask 077
 
-##
-# Variables
-##
+### Variables ###
 
 GPG_OPTS="--quiet --yes --batch"
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.password-store}"
@@ -33,9 +31,7 @@ else
   GPG_OPTS="${GPG_OPTS} --default-recipient-self"
 fi
 
-##
-# Helper
-##
+### Helper ###
 
 abort() {
   echo "${1}" 1>&2
@@ -66,9 +62,7 @@ list() {
   echo
 }
 
-##
-# Commands
-##
+### Commands ###
 
 show() {
   [ -z "${1}" ] && abort "USAGE: tpm show ENTRY"
@@ -95,9 +89,7 @@ insert() {
     | gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
-##
-# Parse input
-##
+### Parse input ###
 
 [ $# -gt 2 ] && abort "tpm doesn't accept more than two arguments."
 
