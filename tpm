@@ -73,7 +73,8 @@ list() {
   [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
     && abort "The specified group doesn't exist. See 'tpm list'."
 
-  tree --noreport -- "${STORE_DIR}/${1}"
+  tree --noreport -- "${STORE_DIR}/${1}" \
+    | sed 's/.gpg$//g'
   echo
 }
 
