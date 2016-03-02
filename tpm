@@ -84,7 +84,7 @@ remove() {
 
   [ -w "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
 
-  rm -i "${STORE_DIR}"/"${1}".gpg && echo "${1} has been removed."
+  rm -i "${STORE_DIR}"/"${1}".gpg
 }
 
 show() {
