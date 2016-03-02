@@ -82,7 +82,7 @@ list() {
 remove() {
   [ -z "${1}" ] && abort "USAGE: tpm remove ENTRY"
 
-  [ -e "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
+  [ -w "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
 
   rm -i "${STORE_DIR}"/"${1}".gpg && echo "${1} has been removed."
 }
@@ -92,7 +92,7 @@ show() {
 
   entry="${STORE_DIR}"/"${1}".gpg
 
-  if [ ! -e "${entry}" ]; then
+  if [ ! -r "${entry}" ]; then
     entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
 
     [ -z "${entry}" ] && abort "The requested entry doesn't exist."
