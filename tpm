@@ -89,9 +89,18 @@ remove() {
 show() {
   [ -z "${1}" ] && abort "USAGE: tpm show ENTRY"
 
-  [ -e "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
+  entry="${STORE_DIR}"/"${1}".gpg
 
-  gpg2 ${GPG_OPTS} --decrypt "${STORE_DIR}"/"${1}".gpg
+  if [ ! -e "${entry}" ]; then
+    entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
+
+    [ -z "${entry}" ] && abort "The requested entry doesn't exist."
+
+    [ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
+      && abort "The given keyword is too ambigious."
+  fi
+
+  gpg2 ${GPG_OPTS} --decrypt "${entry}"
 }
 
 ### Parse input ###
