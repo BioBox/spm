@@ -23,6 +23,10 @@ I<help> as command without entry will show how to use tpm. The command
 I<list> will list all entries in the group I<group>. If I<group> is
 omitted, all entries of all groups will be listed.
 
+I<show> will also match simple patterns to avoid typing the entry's
+complete name including its group\(s\). However, the given pattern must
+not be ambigious.
+
 =head1 ENVIRONMENT
 
 =over 4
@@ -60,6 +64,12 @@ Create a new entry called 'system/root':
 Write your 'system/root' password to standard output:
 
 	$ tpm show system/root
+
+Write the entry's password that matches the given pattern to standard
+output:
+
+	$ tpm show em/r*t
+	$ tpm show root
 
 Copy your 'system/root' password to the clipboard using xclip(1):
 
