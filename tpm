@@ -106,7 +106,8 @@ show() {
 
 ## Parse input
 
-[ $# -gt 2 ] && abort " Too many arguments."
+[ ${#} -eq 0 ] || [ ${#} -gt 2 ] \
+	&& abort "Invalid number of arguments. See 'tpm help'."
 
 case "${1}" in
 	insert|list|remove|show)
