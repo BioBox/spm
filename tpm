@@ -23,85 +23,85 @@ GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.tpm}"
 
 if [ -n "${PASSWORD_STORE_KEY}" ]; then
-  GPG_OPTS="${GPG_OPTS} --recipient ${PASSWORD_STORE_KEY}"
+	GPG_OPTS="${GPG_OPTS} --recipient ${PASSWORD_STORE_KEY}"
 else
-  GPG_OPTS="${GPG_OPTS} --default-recipient-self"
+	GPG_OPTS="${GPG_OPTS} --default-recipient-self"
 fi
 
 ### Helper ###
 
 abort() {
-  printf '%s\n' "${1}" 1>&2
-  exit 1
+	printf '%s\n' "${1}" 1>&2
+	exit 1
 }
 
 readpw() {
-  if [ -t 0 ]; then
-    printf '%s' "${1}"
-    stty -echo
-  fi
+	if [ -t 0 ]; then
+		printf '%s' "${1}"
+		stty -echo
+	fi
 
-  IFS= read -r "${2}"
-  [ -t 0 ] && stty echo
+	IFS= read -r "${2}"
+	[ -t 0 ] && stty echo
 }
 
 usage() {
-  printf 'USAGE: tpm show|insert|list|help [ENTRY|GROUP]\n'
+	printf 'USAGE: tpm show|insert|list|help [ENTRY|GROUP]\n'
 }
 
 ### Commands ###
 
 insert() {
-  [ -z "${1}" ] && abort 'USAGE: tpm insert ENTRY'
+	[ -z "${1}" ] && abort 'USAGE: tpm insert ENTRY'
 
-  [ -e "${STORE_DIR}"/"${1}".gpg ] \
-    && abort 'The existent entry must be removed first.'
+	[ -e "${STORE_DIR}"/"${1}".gpg ] \
+		&& abort 'The existent entry must be removed first.'
 
-  password=""
-  readpw "Password for '${1}': " password
-  [ -t 0 ] && printf '\n'
+	password=""
+	readpw "Password for '${1}': " password
+	[ -t 0 ] && printf '\n'
 
-  [ -z "${password}" ] && abort 'No password specified.'
+	[ -z "${password}" ] && abort 'No password specified.'
 
-  mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
-  printf '%s\n' "${password}" \
-    | gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
+	mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
+	printf '%s\n' "${password}" \
+		| gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
 list() {
-  [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
+	[ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
-  [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
-    && abort "No such group. See 'tpm list'."
+	[ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
+		&& abort "No such group. See 'tpm list'."
 
-  tree --noreport -l -C -- "${STORE_DIR}/${1}" \
-    | sed 's/.gpg$//g'
-  printf '\n'
+	tree --noreport -l -C -- "${STORE_DIR}/${1}" \
+		| sed 's/.gpg$//g'
+	printf '\n'
 }
 
 remove() {
-  [ -z "${1}" ] && abort 'USAGE: tpm remove ENTRY'
+	[ -z "${1}" ] && abort 'USAGE: tpm remove ENTRY'
 
-  [ -w "${STORE_DIR}"/"${1}".gpg ] || abort 'No such entry.'
+	[ -w "${STORE_DIR}"/"${1}".gpg ] || abort 'No such entry.'
 
-  rm -i "${STORE_DIR}"/"${1}".gpg
+	rm -i "${STORE_DIR}"/"${1}".gpg
 }
 
 show() {
-  [ -z "${1}" ] && abort 'USAGE: tpm show ENTRY'
+	[ -z "${1}" ] && abort 'USAGE: tpm show ENTRY'
 
-  entry="${STORE_DIR}"/"${1}".gpg
+	entry="${STORE_DIR}"/"${1}".gpg
 
-  if [ ! -r "${entry}" ]; then
-    entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
+	if [ ! -r "${entry}" ]; then
+		entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
 
-    [ -z "${entry}" ] && abort 'No such entry.'
+		[ -z "${entry}" ] && abort 'No such entry.'
 
-    [ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-      && abort 'Too ambigious keyword.'
-  fi
+		[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
+			&& abort 'Too ambigious keyword.'
+	fi
 
-  gpg2 ${GPG_OPTS} --decrypt "${entry}"
+	gpg2 ${GPG_OPTS} --decrypt "${entry}"
 }
 
 ### Parse input ###
@@ -109,15 +109,13 @@ show() {
 [ $# -gt 2 ] && abort " Too many arguments."
 
 case "${1}" in
-  insert|list|remove|show)
-    ${1}    "${2}"
-    ;;
-  help)
-    usage
-    ;;
-  *)
-    abort   "Invalid command. See 'tpm help'."
-    ;;
+	insert|list|remove|show)
+		${1}    "${2}"
+		;;
+	help)
+		usage
+		;;
+	*)
+		abort   "Invalid command. See 'tpm help'."
+		;;
 esac
-
-# vim: et:sw=2:sts=2
