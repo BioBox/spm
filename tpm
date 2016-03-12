@@ -19,7 +19,7 @@ umask 077
 
 ### Variables ###
 
-GPG_OPTS="--quiet --yes --batch"
+GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.tpm}"
 
 if [ -n "${PASSWORD_STORE_KEY}" ]; then
@@ -52,16 +52,16 @@ usage() {
 ### Commands ###
 
 insert() {
-  [ -z "${1}" ] && abort "USAGE: tpm insert ENTRY"
+  [ -z "${1}" ] && abort 'USAGE: tpm insert ENTRY'
 
   [ -e "${STORE_DIR}"/"${1}".gpg ] \
-    && abort "This entry already exists, please remove it first."
+    && abort 'The existent entry must be removed first.'
 
   password=""
   readpw "Password for '${1}': " password
   [ -t 0 ] && printf '\n'
 
-  [ -z "${password}" ] && abort "You didn't specify a password."
+  [ -z "${password}" ] && abort 'No password specified.'
 
   mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
   printf '%s\n' "${password}" \
@@ -72,7 +72,7 @@ list() {
   [ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
   [ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
-    && abort "The specified group doesn't exist. See 'tpm list'."
+    && abort "No such group. See 'tpm list'."
 
   tree --noreport -l -C -- "${STORE_DIR}/${1}" \
     | sed 's/.gpg$//g'
@@ -80,25 +80,25 @@ list() {
 }
 
 remove() {
-  [ -z "${1}" ] && abort "USAGE: tpm remove ENTRY"
+  [ -z "${1}" ] && abort 'USAGE: tpm remove ENTRY'
 
-  [ -w "${STORE_DIR}"/"${1}".gpg ] || abort "The requested entry doesn't exist."
+  [ -w "${STORE_DIR}"/"${1}".gpg ] || abort 'No such entry.'
 
   rm -i "${STORE_DIR}"/"${1}".gpg
 }
 
 show() {
-  [ -z "${1}" ] && abort "USAGE: tpm show ENTRY"
+  [ -z "${1}" ] && abort 'USAGE: tpm show ENTRY'
 
   entry="${STORE_DIR}"/"${1}".gpg
 
   if [ ! -r "${entry}" ]; then
     entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
 
-    [ -z "${entry}" ] && abort "The requested entry doesn't exist."
+    [ -z "${entry}" ] && abort 'No such entry.'
 
     [ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-      && abort "The given keyword is too ambigious."
+      && abort 'Too ambigious keyword.'
   fi
 
   gpg2 ${GPG_OPTS} --decrypt "${entry}"
@@ -106,17 +106,17 @@ show() {
 
 ### Parse input ###
 
-[ $# -gt 2 ] && abort "tpm doesn't accept more than two arguments."
+[ $# -gt 2 ] && abort " Too many arguments."
 
 case "${1}" in
-  'insert'|'list'|'remove'|'show')
+  insert|list|remove|show)
     ${1}    "${2}"
     ;;
-  'help')
+  help)
     usage
     ;;
   *)
-    abort   "You didn't specify a valid command. See 'tpm help'."
+    abort   "Invalid command. See 'tpm help'."
     ;;
 esac
 
