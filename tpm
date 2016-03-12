@@ -17,7 +17,7 @@
 
 umask 077
 
-### Variables ###
+## Variables
 
 GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.tpm}"
@@ -28,7 +28,7 @@ else
 	GPG_OPTS="${GPG_OPTS} --default-recipient-self"
 fi
 
-### Helper ###
+## Helper
 
 abort() {
 	printf '%s\n' "${1}" 1>&2
@@ -49,7 +49,7 @@ usage() {
 	printf 'USAGE: tpm show|insert|list|help [ENTRY|GROUP]\n'
 }
 
-### Commands ###
+## Commands
 
 insert() {
 	[ -z "${1}" ] && abort 'USAGE: tpm insert ENTRY'
@@ -104,7 +104,7 @@ show() {
 	gpg2 ${GPG_OPTS} --decrypt "${entry}"
 }
 
-### Parse input ###
+## Parse input
 
 [ $# -gt 2 ] && abort " Too many arguments."
 
