@@ -55,7 +55,7 @@ insert() {
 	[ -z "${1}" ] && abort 'USAGE: tpm insert ENTRY'
 
 	[ -e "${STORE_DIR}"/"${1}".gpg ] \
-		&& abort 'The existent entry must be removed first.'
+		&& abort 'Entry already exists.'
 
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
