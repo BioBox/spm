@@ -24,7 +24,7 @@ tpm.1: README.pod
 		--release="tpm $(VERSION)" $< $@
 
 install: tpm.1
-	install -Dm755 tpm "$(DESTDIR)$(BINDIR)/tpm"
+	install -Dm755 tpm.sh "$(DESTDIR)$(BINDIR)/tpm"
 	install -Dm644 tpm.1 "$(DESTDIR)$(MANDIR)/man1/tpm.1"
 
 uninstall:
