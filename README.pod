@@ -14,18 +14,27 @@ store your passwords, the major difference between pass and tpm is that
 the latter is a lot more minimal. Furthermore, tpm is written entirely
 in POSIX shell.
 
-Invoking tpm consists of specifying a command either I<insert> or
-I<show> and supplying one entry as a target. If I<insert> is specified
-as a command tpm will create a new entry and prompt for the
-corresponding password. If you specify I<show> as a command tpm will
-write the password for the given entry to standard output. Specifying
-I<help> as command without entry will show how to use tpm. The command
-I<list> will list all entries in the group I<group>. If I<group> is
-omitted, all entries of all groups will be listed.
+Adding, removing or showing a password is done by invoking tpm with the
+I<insert>, I<remove> or I<show> command respectively followed by a
+name. tpm will then prompt for a password or confirmation before it
+modifies or shows the corresponding entry.
 
-I<show> will also match simple patterns to avoid typing the entry's
-complete name including its group\(s\). However, the given pattern must
-not be ambigious.
+When using the I<show> command, globbing is allowed to avoid typing
+potentially long entry paths. In case multiple entries match, tpm exits
+without showing any password but a warning instead.
+
+tpm I<help> prints information about how to use tpm.
+
+tpm simply stores everything in a directory structure where passwords
+correspond to individually PGP encrypted files, optionally residing
+inside nested subdirectories of arbitrary depth, where any subdirectory
+can be interpreted as a (sub)group to manage large collections easily.
+
+This allows for transparent integration with B<git> for example to keep
+track of changes and/or add comments while editing passwords.
+
+tpm I<list> followed by a directory path, that is a group name, lists
+all entries inside the specified group as well as all its subgroups.
 
 =head1 ENVIRONMENT
 
@@ -33,7 +42,7 @@ not be ambigious.
 
 =item B<PASSWORD_STORE_DIR>
 
-The storage directory (default: ~/.tpm).
+The storage directory (default: ~/.tpm/).
 
 =item B<PASSWORD_STORE_KEY>
 
@@ -45,7 +54,7 @@ GPG key to encrypt files with (default: self).
 
 =over 4
 
-=item I<~/.tpm>
+=item I<~/.tpm/>
 
 The default storage directory.
 
@@ -81,4 +90,4 @@ List all entries of the group 'system':
 
 =head1 SEE ALSO
 
-gpg2(1), pwgen(1), xclip(1)
+git(1), gpg2(1), pwgen(1), xclip(1)
