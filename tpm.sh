@@ -69,7 +69,6 @@ list() {
 
 	tree --noreport -l -C -- "${STORE_DIR}/${1}" \
 		| sed 's/.gpg$//g'
-	printf '\n'
 }
 
 del() {
