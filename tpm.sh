@@ -68,7 +68,7 @@ list() {
 		&& die "No such group. See 'tpm list'."
 
 	tree --noreport -l -C -- "${STORE_DIR}/${1}" \
-		| sed 's/.gpg$//g'
+		| sed "1s,${STORE_DIR}/,,; s,.gpg$,,g"
 }
 
 del() {
