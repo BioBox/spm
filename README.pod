@@ -28,7 +28,7 @@ correspond to individually PGP encrypted files, optionally residing
 inside nested subdirectories of arbitrary depth, where any subdirectory
 can be interpreted as a (sub)group to manage large collections easily.
 
-This allows for transparent integration with B<git> for example to keep
+This allows for transparent integration with git(1) for example to keep
 track of changes and/or add comments while editing passwords.
 
 tpm I<list> followed by a directory path, that is a group name, lists
