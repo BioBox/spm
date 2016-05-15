@@ -15,11 +15,11 @@ From the original project:
 
 Create a new entry with a random password using `pwgen`:
 
-	$ pwgen -1 | tpm insert system/new-user
+	$ pwgen -1 | tpm add system/new-user
 
 Create a new entry called *system/root*:
 
-	$ tpm insert system/root
+	$ tpm add system/root
 
 Write your *system/root* password to standard output:
 

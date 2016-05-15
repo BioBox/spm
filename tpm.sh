@@ -30,7 +30,7 @@ fi
 
 ## Helper
 
-abort() {
+die() {
 	printf '%s\n' "${1}" 1>&2
 	exit 1
 }
@@ -47,14 +47,14 @@ readpw() {
 
 ## Commands
 
-insert() {
-	[ -z "${1}" ] && abort 'Name must not be empty.'
-	[ -e "${STORE_DIR}"/"${1}".gpg ] && abort 'Entry already exists.'
+add() {
+	[ -z "${1}" ] && die 'Name must not be empty.'
+	[ -e "${STORE_DIR}"/"${1}".gpg ] && die 'Entry already exists.'
 
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
 
-	[ -z "${password}" ] && abort 'No password specified.'
+	[ -z "${password}" ] && die 'No password specified.'
 
 	mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
 	printf '%s\n' "${password}" \
@@ -65,32 +65,32 @@ list() {
 	[ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
 	[ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
-		&& abort "No such group. See 'tpm list'."
+		&& die "No such group. See 'tpm list'."
 
 	tree --noreport -l -C -- "${STORE_DIR}/${1}" \
 		| sed 's/.gpg$//g'
 	printf '\n'
 }
 
-remove() {
-	[ -z "${1}" ] && abort 'Name must not be empty.'
-	[ -w "${STORE_DIR}"/"${1}".gpg ] || abort 'No such entry.'
+del() {
+	[ -z "${1}" ] && die 'Name must not be empty.'
+	[ -w "${STORE_DIR}"/"${1}".gpg ] || die 'No such entry.'
 
 	rm -i "${STORE_DIR}"/"${1}".gpg
 }
 
 show() {
-	[ -z "${1}" ] && abort 'Name must not be empty.'
+	[ -z "${1}" ] && die 'Name must not be empty.'
 
 	entry="${STORE_DIR}"/"${1}".gpg
 
 	if [ ! -r "${entry}" ]; then
 		entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
 
-		[ -z "${entry}" ] && abort 'No such entry.'
+		[ -z "${entry}" ] && die 'No such entry.'
 
 		[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-			&& abort 'Too ambigious keyword.'
+			&& die 'Too ambigious keyword.'
 	fi
 
 	gpg2 ${GPG_OPTS} --decrypt "${entry}"
@@ -99,20 +99,20 @@ show() {
 ## Parse input
 
 [ ${#} -eq 0 ] || [ ${#} -gt 2 ] \
-	&& abort "Invalid number of arguments. See 'tpm help'."
+	&& die "Invalid number of arguments. See 'tpm help'."
 
 case "${1}" in
-	insert|list|remove|show)
-		${1}    "${2}"
+	add|del|list|show)
+		${1}	"${2}"
 		;;
 	help)
 		cat <<- EOF
-		USAGE:	tpm show|insert|list|help [ENTRY|GROUP]
+		USAGE:	tpm add|del|list|show|help [ENTRY|GROUP]
 
 		See tpm(1) for more information.
 		EOF
 		;;
 	*)
-		abort   "Invalid command. See 'tpm help'."
+		die	"Invalid command. See 'tpm help'."
 		;;
 esac

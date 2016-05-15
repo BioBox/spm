@@ -15,9 +15,9 @@ the latter is a lot more minimal. Furthermore, tpm is written entirely
 in POSIX shell.
 
 Adding, removing or showing a password is done by invoking tpm with the
-I<insert>, I<remove> or I<show> command respectively followed by a
-name. tpm will then prompt for a password or confirmation before it
-modifies or shows the corresponding entry.
+I<add>, I<del> or I<show> command respectively followed by a name.
+tpm will then prompt for a password or confirmation before it modifies
+or shows the corresponding entry.
 
 When using the I<show> command, globbing is allowed to avoid typing
 potentially long entry paths. In case multiple entries match, tpm exits
@@ -64,11 +64,11 @@ The default storage directory.
 
 Create a new entry with a random password using pwgen(1):
 
-	$ pwgen -1 | tpm insert system/new-user
+	$ pwgen -1 | tpm add system/new-user
 
 Create a new entry called 'system/root':
 
-	$ tpm insert system/root
+	$ tpm add system/root
 
 Write your 'system/root' password to standard output:
 
