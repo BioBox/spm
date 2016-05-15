@@ -48,10 +48,8 @@ readpw() {
 ## Commands
 
 insert() {
-	[ -z "${1}" ] && abort 'USAGE: tpm insert ENTRY'
-
-	[ -e "${STORE_DIR}"/"${1}".gpg ] \
-		&& abort 'Entry already exists.'
+	[ -z "${1}" ] && abort 'Name must not be empty.'
+	[ -e "${STORE_DIR}"/"${1}".gpg ] && abort 'Entry already exists.'
 
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
@@ -75,15 +73,14 @@ list() {
 }
 
 remove() {
-	[ -z "${1}" ] && abort 'USAGE: tpm remove ENTRY'
-
+	[ -z "${1}" ] && abort 'Name must not be empty.'
 	[ -w "${STORE_DIR}"/"${1}".gpg ] || abort 'No such entry.'
 
 	rm -i "${STORE_DIR}"/"${1}".gpg
 }
 
 show() {
-	[ -z "${1}" ] && abort 'USAGE: tpm show ENTRY'
+	[ -z "${1}" ] && abort 'Name must not be empty.'
 
 	entry="${STORE_DIR}"/"${1}".gpg
 
