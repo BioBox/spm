@@ -23,8 +23,6 @@ When using the I<show> command, globbing is allowed to avoid typing
 potentially long entry paths. In case multiple entries match, tpm exits
 without showing any password but a warning instead.
 
-tpm I<help> prints information about how to use tpm.
-
 tpm simply stores everything in a directory structure where passwords
 correspond to individually PGP encrypted files, optionally residing
 inside nested subdirectories of arbitrary depth, where any subdirectory
@@ -35,6 +33,8 @@ track of changes and/or add comments while editing passwords.
 
 tpm I<list> followed by a directory path, that is a group name, lists
 all entries inside the specified group as well as all its subgroups.
+
+tpm I<help> prints information about how to use tpm.
 
 =head1 ENVIRONMENT
 
