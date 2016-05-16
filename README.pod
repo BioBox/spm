@@ -65,6 +65,18 @@ The default storage directory.
 
 =back
 
+=head1 STDOUT
+
+Prompts, entry names and passwords are written to the standard output.
+
+=head1 STDERR
+
+The standard error is used for diagnostic messages only.
+
+=head1 EXIT STATUS
+
+tpm returns 1 if an error occured otherwise 0.
+
 =head1 EXAMPLES
 
 Create a new entry with a random password using pwgen(1):
@@ -95,4 +107,4 @@ List all entries of the group 'system':
 
 =head1 SEE ALSO
 
-git(1), gpg2(1), pwgen(1), xclip(1)
+git(1), gpg2(1), ln(1), pwgen(1), xclip(1)
