@@ -41,5 +41,5 @@ List all entries of the group *system*:
 
 ---
 
-Also see my aliases in *.mksh/tpm.sh* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository for other
+Also see my aliases in *.sh/tpm* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository for other
 examples on how to make tpm even easier to use.
