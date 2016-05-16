@@ -37,6 +37,7 @@ entries for example.
 
 tpm I<list> followed by a directory path, that is a group name, lists
 all entries inside the specified group as well as all its subgroups.
+If not name is given, all entries will be listed.
 
 tpm I<help> prints information about how to use tpm.
 
