@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2015 Sören Tempel
+# Copyright (C) 2013-2016 Sören Tempel
 # Copyright (C) 2016 Klemens Nanni <kl3@posteo.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 VERSION = 1.4.5
-PREFIX  = /usr/local
-BINDIR  = $(PREFIX)/bin
-MANDIR  = $(PREFIX)/share/man
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+MANDIR ?= $(PREFIX)/share/man
 
 install:
 	install -Dm755 spm.sh "$(DESTDIR)$(BINDIR)/spm"
