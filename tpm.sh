@@ -84,7 +84,8 @@ show() {
 	entry="${STORE_DIR}"/"${1}".gpg
 
 	if [ ! -r "${entry}" ]; then
-		entry=$(find "${STORE_DIR}" -type f -iwholename "*${1}*".gpg)
+		entry=$(find "${STORE_DIR}" \( -type f -o -type l \) \
+				-iwholename "*${1}*".gpg)
 
 		[ -z "${entry}" ] && die 'No such entry.'
 
