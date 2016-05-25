@@ -18,20 +18,20 @@ PREFIX  = /usr/local
 BINDIR  = $(PREFIX)/bin
 MANDIR  = $(PREFIX)/share/man
 
-all: tpm.1
-tpm.1: README.pod
-	pod2man --section=1 --center="tpm Manual" --name="tpm" \
-		--release="tpm $(VERSION)" $< $@
+all: spm.1
+spm.1: README.pod
+	pod2man --section=1 --center="spm Manual" --name="spm" \
+		--release="spm $(VERSION)" $< $@
 
-install: tpm.1
-	install -Dm755 tpm.sh "$(DESTDIR)$(BINDIR)/tpm"
-	install -Dm644 tpm.1 "$(DESTDIR)$(MANDIR)/man1/tpm.1"
+install: spm.1
+	install -Dm755 spm.sh "$(DESTDIR)$(BINDIR)/spm"
+	install -Dm644 spm.1 "$(DESTDIR)$(MANDIR)/man1/spm.1"
 
 uninstall:
-	$(RM) "$(DESTDIR)$(BINDIR)/tpm" \
-		"$(DESTDIR)$(MANDIR)/man1/tpm.1"
+	$(RM) "$(DESTDIR)$(BINDIR)/spm" \
+		"$(DESTDIR)$(MANDIR)/man1/spm.1"
 
 clean:
-	$(RM) tpm.1
+	$(RM) spm.1
 
 .PHONY: all install uninstall clean

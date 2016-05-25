@@ -1,29 +1,29 @@
 =head1 NAME
 
-tpm - tiny password manager
+spm - simple password manager
 
 =head1 SYNOPSIS
 
-B<tpm> I<COMMAND> [I<ENTRY>|I<GROUP>]
+B<spm> I<COMMAND> [I<ENTRY>|I<GROUP>]
 
 =head1 DESCRIPTION
 
-tpm is a tiny shell script which is heavily inspired and largely
+spm is a simple shell script which is heavily inspired and largely
 compatible with pass(1). Just like pass it uses gpg2(1) to securely
-store your passwords, the major difference between pass and tpm is that
-the latter is a lot more minimal. Furthermore, tpm is written entirely
-in POSIX shell.
+store your passwords, the major difference between pass and spm is that
+the latter is a lot more minimal. Furthermore, spm is written entirely
+in POSIX shell. spm is a fork of tpm(1).
 
-Adding, removing or showing a password is done by invoking tpm with the
+Adding, removing or showing a password is done by invoking spm with the
 I<add>, I<del> or I<show> command respectively followed by a name.
-tpm will then prompt for a password or confirmation before it modifies
+spm will then prompt for a password or confirmation before it modifies
 or shows the corresponding entry.
 
 When using the I<show> command, globbing is allowed to avoid typing
-potentially long entry paths. In case multiple entries match, tpm exits
+potentially long entry paths. In case multiple entries match, spm exits
 without showing any password but a warning instead.
 
-tpm simply stores everything in a directory structure where passwords
+spm simply stores everything in a directory structure where passwords
 correspond to individually PGP encrypted files, optionally residing
 inside nested subdirectories of arbitrary depth, where any subdirectory
 can be interpreted as a (sub)group to manage large collections easily.
@@ -35,11 +35,11 @@ Using ln(1) entries can be symlinked to indicate multiple accounts or
 users share the same passphrase or create shortcuts to frequently used
 entries for example.
 
-tpm I<list> followed by a directory path, that is a group name, lists
+spm I<list> followed by a directory path, that is a group name, lists
 all entries inside the specified group as well as all its subgroups.
 If not name is given, all entries will be listed.
 
-tpm I<help> prints information about how to use tpm.
+spm I<help> prints information about how to use spm.
 
 =head1 ENVIRONMENT
 
@@ -47,7 +47,7 @@ tpm I<help> prints information about how to use tpm.
 
 =item B<PASSWORD_STORE_DIR>
 
-The storage directory (default: ~/.tpm/).
+The storage directory (default: ~/.spm/).
 
 =item B<PASSWORD_STORE_KEY>
 
@@ -59,7 +59,7 @@ GPG key to encrypt files with (default: self).
 
 =over 4
 
-=item I<~/.tpm/>
+=item I<~/.spm/>
 
 The default storage directory.
 
@@ -75,36 +75,36 @@ The standard error is used for diagnostic messages only.
 
 =head1 EXIT STATUS
 
-tpm returns 1 if an error occured otherwise 0.
+spm returns 1 if an error occured otherwise 0.
 
 =head1 EXAMPLES
 
 Create a new entry with a random password using pwgen(1):
 
-	$ pwgen -1 | tpm add system/new-user
+	$ pwgen -1 | spm add system/new-user
 
 Create a new entry called 'system/root':
 
-	$ tpm add system/root
+	$ spm add system/root
 
 Write your 'system/root' password to standard output:
 
-	$ tpm show system/root
+	$ spm show system/root
 
 Write the entry's password that matches the given pattern to standard
 output:
 
-	$ tpm show em/r*t
-	$ tpm show root
+	$ spm show em/r*t
+	$ spm show root
 
 Copy your 'system/root' password to the clipboard using xclip(1):
 
-	$ tpm show system/root | tr -d '\n' | xclip
+	$ spm show system/root | tr -d '\n' | xclip
 
 List all entries of the group 'system':
 
-	$ tpm list system
+	$ spm list system
 
 =head1 SEE ALSO
 
-git(1), gpg2(1), ln(1), pwgen(1), xclip(1)
+git(1), gpg2(1), ln(1), pwgen(1), tpm(1), xclip(1)

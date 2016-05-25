@@ -1,5 +1,5 @@
-tpm - tiny password manager
-===========================
+spm - simple password manager
+=============================
 
 This is a fork of [nmeum's tpm](https://github.com/nmeum/tpm), I felt like changing things here and there
 was necessary to finally get the password manager that suits my needs.
@@ -15,31 +15,31 @@ From the original project:
 
 Create a new entry with a random password using `pwgen`:
 
-	$ pwgen -1 | tpm add system/new-user
+	$ pwgen -1 | spm add system/new-user
 
 Create a new entry called *system/root*:
 
-	$ tpm add system/root
+	$ spm add system/root
 
 Write your *system/root* password to standard output:
 
-	$ tpm show system/root
+	$ spm show system/root
 
 Write the entry's password that matches the given pattern to standard output:
 
-	$ tpm show em/r*t
-	$ tpm show sys*ot
-	$ tpm show root
+	$ spm show em/r*t
+	$ spm show sys*ot
+	$ spm show root
 
 Copy your *system/root* password to the primary selection using `xclip`:
 
-	$ tpm show system/root | tr -d '\n' | xclip
+	$ spm show system/root | tr -d '\n' | xclip
 
 List all entries of the group *system*:
 
-	$ tpm list system
+	$ spm list system
 
 ---
 
-Also see my aliases in *.sh/tpm* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository for other
-examples on how to make tpm even easier to use.
+Also see my aliases in *.sh/spm* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository for other
+examples on how to make spm even easier to use.

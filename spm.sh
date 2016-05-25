@@ -20,7 +20,7 @@ umask 077
 ## Variables
 
 GPG_OPTS='--quiet --yes --batch'
-STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.tpm}"
+STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 
 if [ -z "${PASSWORD_STORE_KEY}" ]; then
 	GPG_OPTS="${GPG_OPTS} --default-recipient-self"
@@ -65,7 +65,7 @@ list() {
 	[ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
 	[ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
-		&& die "No such group. See 'tpm list'."
+		&& die "No such group. See 'spm list'."
 
 	tree --noreport -l -C -- "${STORE_DIR}/${1}" \
 		| sed "1s,${STORE_DIR}/,,; s,.gpg,,g"
@@ -99,7 +99,7 @@ show() {
 ## Parse input
 
 [ ${#} -eq 0 ] || [ ${#} -gt 2 ] \
-	&& die "Invalid number of arguments. See 'tpm help'."
+	&& die "Invalid number of arguments. See 'spm help'."
 
 case "${1}" in
 	add|del|list|show)
@@ -107,12 +107,12 @@ case "${1}" in
 		;;
 	help)
 		cat <<- EOF
-		USAGE:	tpm add|del|list|show|help [ENTRY|GROUP]
+		USAGE:	spm add|del|list|show|help [ENTRY|GROUP]
 
-		See tpm(1) for more information.
+		See spm(1) for more information.
 		EOF
 		;;
 	*)
-		die	"Invalid command. See 'tpm help'."
+		die	"Invalid command. See 'spm help'."
 		;;
 esac
