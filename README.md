@@ -39,6 +39,10 @@ List all entries of the group *system*:
 
 	$ spm list system
 
+List groups only:
+
+	$ spm list -g
+
 ---
 
 Also see my aliases in *.sh/spm* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository for other

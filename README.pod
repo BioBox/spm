@@ -4,7 +4,7 @@ spm - simple password manager
 
 =head1 SYNOPSIS
 
-B<spm> I<COMMAND> [I<ENTRY>|I<GROUP>]
+B<spm> I<COMMAND> [I<OPTION>] [I<ENTRY>|I<GROUP>]
 
 =head1 DESCRIPTION
 
@@ -37,7 +37,8 @@ entries for example.
 
 spm I<list> followed by a directory path, that is a group name, lists
 all entries inside the specified group as well as all its subgroups.
-If not name is given, all entries will be listed.
+If not name is given, all entries will be listed. Passing I<-g> as
+first parameter causes it to list groups only.
 
 spm I<help> prints information about how to use spm.
 
@@ -104,6 +105,10 @@ Copy your 'system/root' password to the clipboard using xclip(1):
 List all entries of the group 'system':
 
 	$ spm list system
+
+List groups only:
+
+	$ spm list -g
 
 =head1 SEE ALSO
 

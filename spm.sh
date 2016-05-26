@@ -67,7 +67,7 @@ list() {
 	[ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
 		&& die "No such group. See 'spm list'."
 
-	tree --noreport -l -C -- "${STORE_DIR}/${1}" \
+	tree ${grps_only:+-d} --noreport -l -C -- "${STORE_DIR}/${1}" \
 		| sed "1s,${STORE_DIR}/,,; s,.gpg,,g"
 }
 
@@ -98,16 +98,21 @@ show() {
 
 ## Parse input
 
-[ ${#} -eq 0 ] || [ ${#} -gt 2 ] \
+[ ${#} -eq 0 ] || [ ${#} -gt 3 ] \
+|| [ ${#} -eq 3 ] && [ "${1}" != list ] \
 	&& die "Invalid number of arguments. See 'spm help'."
 
 case "${1}" in
-	add|del|list|show)
+	add|del|show)
 		${1}	"${2}"
+		;;
+	list)
+		[ "${2}" = -g ] && grps_only=1 && shift 1
+		list	"${2}"
 		;;
 	help)
 		cat <<- EOF
-		USAGE:	spm add|del|list|show|help [ENTRY|GROUP]
+		USAGE:	spm add|del|list [-g]|show|help [ENTRY|GROUP]
 
 		See spm(1) for more information.
 		EOF
