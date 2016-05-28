@@ -31,7 +31,7 @@ fi
 ## Helper
 
 die() {
-	printf '%s\n' "${1}" >&1
+	printf '%s\n' "${1}" 1>&2
 	exit 1
 }
 
