@@ -25,7 +25,7 @@ STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 if [ -z "${PASSWORD_STORE_KEY}" ]; then
 	GPG_OPTS="${GPG_OPTS} --default-recipient-self"
 else
-	GPG_OPTS="${GPG_OPTS} --recipient ${PASSWORD_STORE_KEY}"
+	GPG_OPTS="${GPG_OPTS} --recipient '${PASSWORD_STORE_KEY}'"
 fi
 
 ## Helper
