@@ -68,7 +68,8 @@ list() {
 		&& die "No such group. See 'spm list'."
 
 	tree ${grps_only:+-d} --noreport -l -C -- "${STORE_DIR}/${1}" \
-		| sed "1s,${STORE_DIR}/,,; s,.gpg,,g"
+		| sed "1s,${STORE_DIR}/,,; s,.gpg,,g" \
+		| less -E -i -K -R -X
 }
 
 del() {
