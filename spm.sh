@@ -67,7 +67,8 @@ list() {
 	[ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
 		&& die "No such group. See 'spm list'."
 
-	tree ${grps_only:+-d} --noreport -l -C -- "${STORE_DIR}/${1}" \
+	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
+			-- "${STORE_DIR}/${1}" \
 		| sed "s/.gpg//g" \
 		| less -E -i -K -R -X
 }
