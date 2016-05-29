@@ -58,7 +58,8 @@ add() {
 
 	mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
 	printf '%s\n' "${password}" \
-		| gpg2 ${GPG_OPTS} --encrypt --output "${STORE_DIR}"/"${1}".gpg
+		| gpg2 ${GPG_OPTS} --encrypt \
+			--output "${STORE_DIR}"/"${1}".gpg
 }
 
 list() {
