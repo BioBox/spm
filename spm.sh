@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2013-2015 Sören Tempel
+# Copyright (C) 2013-2016 Sören Tempel
 # Copyright (C) 2016 Klemens Nanni <kl3@posteo.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,17 +22,20 @@ umask 077
 GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 
-if [ -z "${PASSWORD_STORE_KEY}" ]; then
-	GPG_OPTS="${GPG_OPTS} --default-recipient-self"
-else
-	GPG_OPTS="${GPG_OPTS} --recipient '${PASSWORD_STORE_KEY}'"
-fi
-
 ## Helper
 
 die() {
 	printf '%s\n' "${1}" 1>&2
 	exit 1
+}
+
+gpg() {
+	echo "_${PASSWORD_STORE_KEY}_"
+	if [ -z "${PASSWORD_STORE_KEY}" ]; then
+		gpg2 ${GPG_OPTS} --default-recipient-self "${@}"
+	else
+		gpg2 ${GPG_OPTS} --recipient "${PASSWORD_STORE_KEY}" "${@}"
+	fi
 }
 
 readpw() {
@@ -58,8 +61,7 @@ add() {
 
 	mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
 	printf '%s\n' "${password}" \
-		| gpg2 ${GPG_OPTS} --encrypt \
-			--output "${STORE_DIR}"/"${1}".gpg
+		| gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
 list() {
@@ -96,7 +98,7 @@ show() {
 			&& die 'Too ambigious keyword.'
 	fi
 
-	gpg2 ${GPG_OPTS} --decrypt "${entry}"
+	gpg --decrypt "${entry}"
 }
 
 ## Parse input
