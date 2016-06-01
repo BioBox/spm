@@ -30,7 +30,6 @@ die() {
 }
 
 gpg() {
-	echo "_${PASSWORD_STORE_KEY}_"
 	if [ -z "${PASSWORD_STORE_KEY}" ]; then
 		gpg2 ${GPG_OPTS} --default-recipient-self "${@}"
 	else
