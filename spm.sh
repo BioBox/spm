@@ -85,17 +85,13 @@ del() {
 show() {
 	[ -z "${1}" ] && die 'Name must not be empty.'
 
-	entry="${STORE_DIR}"/"${1}".gpg
+	entry=$(find "${STORE_DIR}" \( -type f -o -type l \) \
+			-iwholename "*${1}*".gpg)
 
-	if [ ! -r "${entry}" ]; then
-		entry=$(find "${STORE_DIR}" \( -type f -o -type l \) \
-				-iwholename "*${1}*".gpg)
+	[ -z "${entry}" ] && die 'No such entry.'
 
-		[ -z "${entry}" ] && die 'No such entry.'
-
-		[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-			&& die 'Too ambigious keyword.'
-	fi
+	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
+		&& die 'Too ambigious keyword.'
 
 	gpg --decrypt "${entry}"
 }
