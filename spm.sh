@@ -21,12 +21,25 @@ umask 077
 
 GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
+ENTRY=
 
 ## Helper
 
 die() {
 	printf '%s\n' "${1}" 1>&2
 	exit 1
+}
+
+_find() {
+	[ -z "${1}" ] && die 'Name must not be empty.'
+
+	ENTRY=$(find "${STORE_DIR}" \( -type f -o -type l \) \
+			-iwholename "*${1}*".gpg)
+
+	[ -z "${ENTRY}" ] && ENTRY= && die 'No such entry.'
+
+	[ "$(printf '%s' "${ENTRY}" | wc -l)" -gt 0 ] \
+		&& ENTRY= && die 'Too ambigious keyword.'
 }
 
 gpg() {
@@ -76,24 +89,13 @@ list() {
 }
 
 del() {
-	[ -z "${1}" ] && die 'Name must not be empty.'
-	[ -w "${STORE_DIR}"/"${1}".gpg ] || die 'No such entry.'
-
-	rm -i "${STORE_DIR}"/"${1}".gpg
+	_find "${1}"
+	rm -i "${ENTRY}"
 }
 
 show() {
-	[ -z "${1}" ] && die 'Name must not be empty.'
-
-	entry=$(find "${STORE_DIR}" \( -type f -o -type l \) \
-			-iwholename "*${1}*".gpg)
-
-	[ -z "${entry}" ] && die 'No such entry.'
-
-	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-		&& die 'Too ambigious keyword.'
-
-	gpg --decrypt "${entry}"
+	_find "${1}"
+	gpg --decrypt "${ENTRY}"
 }
 
 ## Parse input

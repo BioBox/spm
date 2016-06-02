@@ -19,9 +19,9 @@ I<add>, I<del> or I<show> command respectively followed by a name.
 spm will then prompt for a password or confirmation before it modifies
 or shows the corresponding entry.
 
-When using the I<show> command, globbing is allowed to avoid typing
+Globbing is allowed for both I<del> and I<show> commands to avoid typing
 potentially long entry paths. In case multiple entries match, spm exits
-without showing any password but a warning instead.
+without removing or showing any password but printing a warning instead.
 
 spm simply stores everything in a directory structure where passwords
 correspond to individually PGP encrypted files, optionally residing
