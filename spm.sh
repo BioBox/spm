@@ -26,21 +26,21 @@ ENTRY=
 ## Helper
 
 die() {
-	printf '%s\n' "${1}" 1>&2
+	printf 'Error: %s.\n' "${1}" 1>&2
 	exit 1
 }
 
 _find() {
-	[ -z "${1}" ] && die 'Name must not be empty.'
+	[ -z "${1}" ] && die 'Name must not be empty'
 
 	ENTRY=$(find "${STORE_DIR}" \( -type f -o -type l \) \
 				-iwholename "*${1}*".gpg \
 			| head -n2)
 
-	[ -z "${ENTRY}" ] && ENTRY= && die 'No such entry.'
+	[ -z "${ENTRY}" ] && ENTRY= && die 'No such entry'
 
 	[ "$(printf '%s' "${ENTRY}" | wc -l)" -gt 0 ] \
-		&& ENTRY= && die 'Too ambigious keyword.'
+		&& ENTRY= && die 'Too ambigious keyword'
 }
 
 gpg() {
@@ -52,14 +52,14 @@ gpg() {
 readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
-	[ -z "${2}" ] && die 'No password specified.'
+	[ -z "${2}" ] && die 'No password specified'
 }
 
 ## Commands
 
 add() {
-	[ -z "${1}" ] && die 'Name must not be empty.'
-	[ -e "${STORE_DIR}"/"${1}".gpg ] && die 'Entry already exists.'
+	[ -z "${1}" ] && die 'Name must not be empty'
+	[ -e "${STORE_DIR}"/"${1}".gpg ] && die 'Entry already exists'
 
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
@@ -72,7 +72,7 @@ add() {
 list() {
 	[ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
-	[ -d "${STORE_DIR}/${1}" ] || die "No such group. See 'spm list'."
+	[ -d "${STORE_DIR}/${1}" ] || die "No such group. See 'spm list'"
 
 	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
 			-- "${STORE_DIR}/${1}" \
@@ -95,7 +95,7 @@ show() {
 
 [ ${#} -eq 0 ] || [ ${#} -gt 3 ] \
 || [ ${#} -eq 3 ] && [ "${1}" != list ] \
-	&& die "Invalid number of arguments. See 'spm help'."
+	&& die "Invalid number of arguments. See 'spm help'"
 
 case "${1}" in
 	add|del|show)
@@ -113,6 +113,6 @@ case "${1}" in
 		EOF
 		;;
 	*)
-		die	"Invalid command. See 'spm help'."
+		die	"Invalid command. See 'spm help'"
 		;;
 esac
