@@ -34,7 +34,8 @@ _find() {
 	[ -z "${1}" ] && die 'Name must not be empty.'
 
 	ENTRY=$(find "${STORE_DIR}" \( -type f -o -type l \) \
-			-iwholename "*${1}*".gpg)
+				-iwholename "*${1}*".gpg \
+			| head -n2)
 
 	[ -z "${ENTRY}" ] && ENTRY= && die 'No such entry.'
 
