@@ -72,8 +72,7 @@ add() {
 list() {
 	[ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
 
-	[ -n "${1}" ] && [ ! -d "${STORE_DIR}/${1}" ] \
-		&& die "No such group. See 'spm list'."
+	[ -d "${STORE_DIR}/${1}" ] || die "No such group. See 'spm list'."
 
 	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
 			-- "${STORE_DIR}/${1}" \
