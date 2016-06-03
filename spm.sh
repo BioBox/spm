@@ -84,6 +84,7 @@ list() {
 del() {
 	_find "${1}"
 	rm -i "${ENTRY}"
+	printf '\n'
 }
 
 show() {
