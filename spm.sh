@@ -52,6 +52,7 @@ gpg() {
 readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
+	[ -z "${2}" ] && die 'No password specified.'
 }
 
 ## Commands
@@ -62,8 +63,6 @@ add() {
 
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
-
-	[ -z "${password}" ] && die 'No password specified.'
 
 	mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
 	printf '%s\n' "${password}" \
