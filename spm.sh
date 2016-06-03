@@ -44,21 +44,14 @@ _find() {
 }
 
 gpg() {
-	if [ -z "${PASSWORD_STORE_KEY}" ]; then
-		gpg2 ${GPG_OPTS} --default-recipient-self "${@}"
-	else
-		gpg2 ${GPG_OPTS} --recipient "${PASSWORD_STORE_KEY}" "${@}"
-	fi
+	[ -z "${PASSWORD_STORE_KEY}" ] \
+		&& gpg2 ${GPG_OPTS} --default-recipient-self "${@}" \
+		|| gpg2 ${GPG_OPTS} --recipient "${PASSWORD_STORE_KEY}" "${@}"
 }
 
 readpw() {
-	if [ -t 0 ]; then
-		printf '%s' "${1}"
-		stty -echo
-	fi
-
+	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
-	[ -t 0 ] && stty echo
 }
 
 ## Commands
