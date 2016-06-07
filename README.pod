@@ -8,12 +8,6 @@ B<spm> I<COMMAND> [I<OPTION>] [I<ENTRY>|I<GROUP>]
 
 =head1 DESCRIPTION
 
-spm is a simple shell script which is heavily inspired and largely
-compatible with pass(1). Just like pass it uses gpg2(1) to securely
-store your passwords, the major difference between pass and spm is that
-the latter is a lot more minimal. Furthermore, spm is written entirely
-in POSIX shell. spm is a fork of tpm(1).
-
 Adding, removing or showing a password is done by invoking spm with the
 I<add>, I<del> or I<show> command respectively followed by a name.
 spm will then prompt for a password or confirmation before it modifies

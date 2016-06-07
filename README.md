@@ -1,49 +1,23 @@
 spm - simple password manager
 =============================
 
-This is a fork of [nmeum's tpm](https://github.com/nmeum/tpm), I felt like changing things here and there
-was necessary to finally get the password manager that suits my needs.
+spm is a single fully POSIX shell compliant script utilizing [GnuPG](https://gnupg.org/) in
+combination with the most basic tools only such as find(1) and tree(1).
 
-From the original project:
+Passwords as saved as individually encrypted files inside a directory structure
+of arbitrary depth. Directory and file names represent group and entry names
+respectively.
 
-> tpm is a tiny shell script which is heavily inspired and largely compatible
-> with [pass](http://zx2c4.com/projects/password-store). Just like pass it uses gpg2(1) to securely store your passwords,
-> the major difference between pass and tpm is that the latter is a lot more
-> minimal. Furthermore, tpm is written entirely in POSIX shell.
+This project started as a fork of mneum's [tpm](https://github.com/nmeum/tpm) which at that time was lacking
+crucial features such as removing or listing existent entries (it still does).
 
----
+spm works perfectly with standard input and output allowing easy integration
+with other tools to create a truely flexible and powerful password management
+tool.
 
-Create a new entry with a random password using `pwgen`:
-
-	$ pwgen -1 | spm add system/new-user
-
-Create a new entry called *system/root*:
-
-	$ spm add system/root
-
-Write your *system/root* password to standard output:
-
-	$ spm show system/root
-
-Write the entry's password that matches the given pattern to standard output:
-
-	$ spm show em/r*t
-	$ spm show sys*ot
-	$ spm show root
-
-Copy your *system/root* password to the primary selection using `xclip`:
-
-	$ spm show system/root | tr -d '\n' | xclip
-
-List all entries of the group *system*:
-
-	$ spm list system
-
-List groups only:
-
-	$ spm list -g
+Refer to the manual page for various examples or simply read its source code.
 
 ---
 
-Also see my aliases in *.sh/spm* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository for other
-examples on how to make spm even easier to use.
+*.sh/spm* from my [dotfiles](https://notabug.org/kl3/dotfiles) repository also illustrates an easy way to integrate
+spm.
