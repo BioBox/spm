@@ -2,9 +2,9 @@ spm - simple password manager
 =============================
 
 spm is a single fully POSIX shell compliant script utilizing [GnuPG](https://gnupg.org/) in
-combination with the most basic tools only such as find(1) and tree(1).
+combination with basic tools such as find(1) and tree(1).
 
-Passwords as saved as individually encrypted files inside a directory structure
+Passwords are saved as individually encrypted files inside a directory structure
 of arbitrary depth. Directory and file names represent group and entry names
 respectively.
 
