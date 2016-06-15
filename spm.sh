@@ -21,7 +21,6 @@ umask 077
 
 GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
-ENTRY=
 
 ## Helper
 
@@ -30,15 +29,11 @@ die() {
 	exit 1
 }
 
-_find() {
-	ENTRY=$(find "${STORE_DIR}" \( -type f -o -type l \) \
-				-iwholename "*${1}*".gpg \
-			| head -n2)
+check() {
+	[ -z "${entry}" ] && die 'No such entry'
 
-	[ -z "${ENTRY}" ] && ENTRY= && die 'No such entry'
-
-	[ "$(printf '%s' "${ENTRY}" | wc -l)" -gt 0 ] \
-		&& ENTRY= && die 'Too ambigious keyword'
+	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
+		&& die 'Too ambigious keyword'
 }
 
 gpg() {
@@ -51,6 +46,11 @@ readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
 	[ -z "${2}" ] && die 'No password specified'
+}
+
+search() {
+	find "${STORE_DIR}" \( -type f -o -type l \) \
+		-iwholename "*${1}*".gpg
 }
 
 ## Commands
@@ -78,14 +78,15 @@ list() {
 }
 
 del() {
-	_find "${1}"
-	rm -i "${ENTRY}"
-	printf '\n'
+	entry=$(search "${1}" | head -n2)
+	check
+	rm -i "${entry}"; printf '\n'
 }
 
 show() {
-	_find "${1}"
-	gpg --decrypt "${ENTRY}"
+	entry=$(search "${1}" | head -n2)
+	check
+	gpg --decrypt "${entry}"
 }
 
 ## Parse input
