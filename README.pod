@@ -13,9 +13,13 @@ I<add>, I<del> or I<show> command respectively followed by a name.
 spm will then prompt for a password or confirmation before it modifies
 or shows the corresponding entry.
 
-Globbing is allowed for both I<del> and I<show> commands to avoid typing
-potentially long entry paths. In case multiple entries match, spm exits
+Basic searching is possible through the I<search> command and yields
+absoloute paths to eventually found entries.
+
+Globbing is allowed for I<del>, I<search> and I<show> to avoid typing
+potentially long entry names. In case multiple entries match, spm exits
 without removing or showing any password but printing a warning instead.
+Searching will show all matching paths.
 
 spm simply stores everything in a directory structure where passwords
 correspond to individually PGP encrypted files, optionally residing

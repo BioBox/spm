@@ -96,7 +96,7 @@ show() {
 	&& die "Invalid number of arguments. See 'spm help'"
 
 case "${1}" in
-	add|del|show)
+	add|del|search|show)
 		[ -z "${2}" ] && die 'Name must not be empty'
 		${1}	"${2}"
 		;;
@@ -106,7 +106,7 @@ case "${1}" in
 		;;
 	help)
 		cat <<- EOF
-		USAGE:	spm add|del|list [-g]|show|help [ENTRY|GROUP]
+		USAGE:	spm add|del|list [-g]|search|show|help [ENTRY|GROUP]
 
 		See spm(1) for more information.
 		EOF
