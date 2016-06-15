@@ -31,8 +31,6 @@ die() {
 }
 
 _find() {
-	[ -z "${1}" ] && die 'Name must not be empty'
-
 	ENTRY=$(find "${STORE_DIR}" \( -type f -o -type l \) \
 				-iwholename "*${1}*".gpg \
 			| head -n2)
@@ -58,7 +56,6 @@ readpw() {
 ## Commands
 
 add() {
-	[ -z "${1}" ] && die 'Name must not be empty'
 	[ -e "${STORE_DIR}"/"${1}".gpg ] && die 'Entry already exists'
 
 	readpw "Password for '${1}': " password
@@ -76,7 +73,7 @@ list() {
 
 	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
 			-- "${STORE_DIR}/${1}" \
-		| sed "s/.gpg//g" \
+		| sed s/.gpg//g \
 		| less -E -i -K -R -X
 }
 
@@ -99,6 +96,7 @@ show() {
 
 case "${1}" in
 	add|del|show)
+		[ -z "${2}" ] && die 'Name must not be empty'
 		${1}	"${2}"
 		;;
 	list)
