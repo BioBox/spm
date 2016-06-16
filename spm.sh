@@ -33,7 +33,7 @@ check() {
 	[ -z "${entry}" ] && die 'No such entry'
 
 	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-		&& die 'Too ambigious keyword'
+		&& die "Too ambigious keyword. Try 'spm search'"
 }
 
 gpg() {
@@ -48,10 +48,15 @@ readpw() {
 	[ -z "${2}" ] && die 'No password specified'
 }
 
-search() {
+_search() {
 	find "${STORE_DIR}" \( -type f -o -type l \) \
 		-iwholename "*${1}*".gpg
 }
+
+view() {
+	sed s/.gpg//g | less -E -i -K -R -X
+}
+
 
 ## Commands
 
@@ -73,18 +78,22 @@ list() {
 
 	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
 			-- "${STORE_DIR}/${1}" \
-		| sed s/.gpg//g \
-		| less -E -i -K -R -X
+		| view
 }
 
 del() {
-	entry=$(search "${1}" | head -n2)
+	entry=$(_search "${1}" | head -n2)
 	check
 	rm -i "${entry}"; printf '\n'
 }
 
+search() {
+	_search "${1}" \
+		| view
+}
+
 show() {
-	entry=$(search "${1}" | head -n2)
+	entry=$(_search "${1}" | head -n2)
 	check
 	gpg --decrypt "${entry}"
 }
