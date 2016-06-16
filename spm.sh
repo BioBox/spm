@@ -49,14 +49,13 @@ readpw() {
 }
 
 _search() {
-	find "${STORE_DIR}" \( -type f -o -type l \) \
+	find "${STORE_DIR}"/ \( -type f -o -type l \) \
 		-iwholename "*${1}*".gpg
 }
 
 view() {
 	sed s/.gpg//g | less -E -i -K -R -X
 }
-
 
 ## Commands
 
@@ -66,18 +65,16 @@ add() {
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
 
-	mkdir -p "$(dirname "${STORE_DIR}"/"${1}".gpg)"
+	mkdir -p "${STORE_DIR}"/"${1%/*}"/
 	printf '%s\n' "${password}" \
 		| gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
 list() {
-	[ -d "${STORE_DIR}" ] || mkdir -p "${STORE_DIR}"
-
-	[ -d "${STORE_DIR}/${1}" ] || die "No such group. See 'spm list'"
+	[ -d "${STORE_DIR}"/"${1:-}" ] || die "No such group. See 'spm list'"
 
 	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
-			-- "${STORE_DIR}/${1}" \
+			-- "${STORE_DIR}"/"${1:-}" \
 		| view
 }
 
