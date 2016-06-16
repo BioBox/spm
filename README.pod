@@ -33,12 +33,12 @@ Using ln(1) entries can be symlinked to indicate multiple accounts or
 users share the same passphrase or create shortcuts to frequently used
 entries for example.
 
-spm I<list> followed by a directory path, that is a group name, lists
-all entries inside the specified group as well as all its subgroups.
-If not name is given, all entries will be listed. Passing I<-g> as
-first parameter causes it to list groups only.
+I<list> followed by a directory path, that is a group name, lists all
+entries inside the specified group as well as all its subgroups. If not
+name is given, all entries will be listed. Passing I<-g> as first
+parameter causes it to list groups only.
 
-spm I<help> prints information about how to use spm.
+I<help> prints information about how to use spm.
 
 =head1 ENVIRONMENT
 
