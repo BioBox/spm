@@ -13,8 +13,8 @@ I<add>, I<del> or I<show> command respectively followed by a name.
 spm will then prompt for a password or confirmation before it modifies
 or shows the corresponding entry.
 
-Basic searching is possible through the I<search> command and yields
-absoloute paths to eventually found entries.
+Basic searching is possible through the I<search> command and will show
+matching menu entries accordingly.
 
 Globbing is allowed for I<del>, I<search> and I<show> to avoid typing
 potentially long entry names. In case multiple entries match, spm exits
