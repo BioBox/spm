@@ -108,6 +108,10 @@ List groups only:
 
 	$ spm list -g
 
+Show all entries matching the pattern 'sys':
+
+	$ spm search sys
+
 =head1 SEE ALSO
 
 git(1), gpg2(1), ln(1), pwgen(1), tpm(1), xclip(1)

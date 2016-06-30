@@ -49,8 +49,7 @@ readpw() {
 }
 
 _search() {
-	find "${STORE_DIR}"/ \( -type f -o -type l \) \
-		-iwholename "*${1}*".gpg
+	find "${STORE_DIR}"/ \( -type f -o -type l \) -iwholename "*${1}*".gpg
 }
 
 view() {
@@ -85,10 +84,7 @@ del() {
 }
 
 search() {
-	_search "${1}" \
-		| sed "s^${STORE_DIR}/;
-		       s${1}\x1B\[01;31m${1}\x1B[00mg" \
-		| view
+	_search "${1}" | view
 }
 
 show() {
