@@ -1,0 +1,105 @@
+.TH spm 1 2016-06-30 spm-1.4.4 "Commands Manual"
+.SH	NAME
+spm \- simple password manager
+.SH	SYNOPSIS
+\&\fBspm\fR \fI\s-1COMMAND\s0\fR [\fI\s-1OPTION\s0\fR] [\fI\s-1ENTRY\s0\fR|\fI\s-1GROUP\s0\fR]
+.SH	DESCRIPTION
+Adding, removing or showing a password is done by invoking spm with the
+\&\fIadd\fR, \fIdel\fR or \fIshow\fR command respectively followed by a name.
+spm will then prompt for a password or confirmation before it modifies
+or shows the corresponding entry.
+.SH	OPTIONS
+Basic searching is possible through the \fIsearch\fR command and will show
+matching menu entries accordingly.
+.PP
+Globbing is allowed for \fIdel\fR, \fIsearch\fR and \fIshow\fR to avoid typing
+potentially long entry names. In case multiple entries match, spm exits
+without removing or showing any password but printing a warning instead.
+Searching will show all matching paths.
+.PP
+spm simply stores everything in a directory structure where passwords
+correspond to individually \s-1PGP\s0 encrypted files, optionally residing
+inside nested subdirectories of arbitrary depth, where any subdirectory
+can be interpreted as a (sub)group to manage large collections easily.
+.PP
+This allows for transparent integration with \fIgit\fR\|(1) for example to keep
+track of changes and/or add comments while editing passwords.
+.PP
+Using \fIln\fR\|(1) entries can be symlinked to indicate multiple accounts or
+users share the same passphrase or create shortcuts to frequently used
+entries for example.
+.PP
+\&\fIlist\fR followed by a directory path, that is a group name, lists all
+entries inside the specified group as well as all its subgroups. If not
+name is given, all entries will be listed. Passing \fI\-g\fR as first
+parameter causes it to list groups only.
+.PP
+\&\fIhelp\fR prints information about how to use spm.
+.SH	EXIT STATUS
+spm returns 1 if an error occured otherwise 0.
+.SH	ENVIRONMENT
+.TP
+PASSWORD_STORE_DIR
+The storage directory (default: ~/.spm/).
+.TP
+PASSWORD_STORE_KEY
+GPG key to encrypt files with (default: self).
+.SH	FILES
+.TP
+~/.spm/
+The default storage directory.
+.SH	STDOUT
+Prompts, entry names and passwords are written to the standard output.
+.SH	STDERR
+The standard error is used for diagnostic messages only.
+.SH	EXAMPLES
+Create a new entry with a random password using \fIpwgen\fR\|(1):
+.PP
+.Vb 1
+\&	$ pwgen \-1 | spm add system/new\-user
+.Ve
+.PP
+Create a new entry called 'system/root':
+.PP
+.Vb 1
+\&	$ spm add system/root
+.Ve
+.PP
+Write your 'system/root' password to standard output:
+.PP
+.Vb 1
+\&	$ spm show system/root
+.Ve
+.PP
+Write the entry's password that matches the given pattern to standard
+output:
+.PP
+.Vb 1
+\&	$ spm show em/r*t
+.Ve
+.PP
+Copy your 'system/root' password to the clipboard using \fIxclip\fR\|(1):
+.PP
+.Vb 1
+\&	$ spm show system/root | tr \-d \*(Aq\en\*(Aq | xclip
+.Ve
+.PP
+List all entries of the group 'system':
+.PP
+.Vb 1
+\&	$ spm list system
+.Ve
+.PP
+List groups only:
+.PP
+.Vb 1
+\&	$ spm list \-g
+.Ve
+.PP
+Show all entries matching the pattern 'sys':
+.PP
+.Vb 1
+\&	$ spm search sys
+.Ve
+.SH	SEE ALSO
+\&\fIgit\fR\|(1), \fIgpg2\fR\|(1), \fIln\fR\|(1), \fIpwgen\fR\|(1), \fItpm\fR\|(1), \fIxclip\fR\|(1)

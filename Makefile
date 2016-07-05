@@ -1,4 +1,5 @@
 # Copyright (C) 2013-2015 Sören Tempel
+# Copyright (C) 2016 Klemens Nanni <kl3@posteo.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,12 +19,7 @@ PREFIX  = /usr/local
 BINDIR  = $(PREFIX)/bin
 MANDIR  = $(PREFIX)/share/man
 
-all: spm.1
-spm.1: README.pod
-	pod2man --section=1 --center="spm Manual" --name="spm" \
-		--release="spm $(VERSION)" $< $@
-
-install: spm.1
+install:
 	install -Dm755 spm.sh "$(DESTDIR)$(BINDIR)/spm"
 	install -Dm644 spm.1 "$(DESTDIR)$(MANDIR)/man1/spm.1"
 
@@ -31,7 +27,4 @@ uninstall:
 	$(RM) "$(DESTDIR)$(BINDIR)/spm" \
 		"$(DESTDIR)$(MANDIR)/man1/spm.1"
 
-clean:
-	$(RM) spm.1
-
-.PHONY: all install uninstall clean
+.PHONY: install uninstall
