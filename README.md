@@ -1,12 +1,13 @@
 spm - simple password manager
 =============================
 
-spm is a single fully POSIX shell compliant script utilizing [GnuPG](https://gnupg.org/) in
+spm is a single fully POSIX shell compliant script utilizing gpg2(1) in
 combination with basic tools such as find(1) and tree(1).
 
-Passwords are saved as individually encrypted files inside a directory structure
-of arbitrary depth. Directory and file names represent group and entry names
-respectively.
+spm stores everything in a directory structure where passwords correspond to
+individually [PGP](https://gnupg.org/) encrypted files, optionally residing inside nested
+subdirectories of arbitrary depth, where any subdirectory can be interpreted
+as a (sub)group to manage large collections easily.
 
 This project started as a fork of mneum's [tpm](https://github.com/nmeum/tpm) which at that time was lacking
 crucial features such as removing or listing existent entries (it still does).

@@ -3,38 +3,40 @@
 spm \- simple password manager
 .SH	SYNOPSIS
 \&\fBspm\fR \fI\s-1COMMAND\s0\fR [\fI\s-1OPTION\s0\fR] [\fI\s-1ENTRY\s0\fR|\fI\s-1GROUP\s0\fR]
-.SH	DESCRIPTION
+.SH	DESCRIPTON
+spm is a single fully POSIX shell compliant script utilizing \fIgpg2\fR\|(1)
+in combination with basic tools such as \fIfind\fR\|(1) \fItree\fR\|(1).
+.PP
+spm stores everything in a directory structure where passwords correspond to
+individually \s-1PGP\s0 encrypted files, optionally residing inside nested
+subdirectories of arbitrary depth, where any subdirectory can be interpreted
+as a (sub)group to manage large collections easily.
+.SH	OPTIONS
 Adding, removing or showing a password is done by invoking spm with the
-\&\fIadd\fR, \fIdel\fR or \fIshow\fR command respectively followed by a name.
+\&\fIadd\fR, \fIdel\fR or \fIshow\fR commands respectively followed by a name.
 spm will then prompt for a password or confirmation before it modifies
 or shows the corresponding entry.
-.SH	OPTIONS
+.PP
 Basic searching is possible through the \fIsearch\fR command and will show
 matching menu entries accordingly.
 .PP
-Globbing is allowed for \fIdel\fR, \fIsearch\fR and \fIshow\fR to avoid typing
-potentially long entry names. In case multiple entries match, spm exits
+\&\fIlist\fR followed by a directory path, that is a group name, lists all
+entries inside the specified group as well as all its subgroups. If no name is
+given, all entries will be listed. Passing \fI\-g\fR as first parameter causes
+it to list groups only.
+.PP
+Globbing is allowed for the \fIdel\fR, \fIsearch\fR and \fIshow\fR commands to
+avoid typing long entry names. In case multiple entries match, spm exits
 without removing or showing any password but printing a warning instead.
 Searching will show all matching paths.
 .PP
-spm simply stores everything in a directory structure where passwords
-correspond to individually \s-1PGP\s0 encrypted files, optionally residing
-inside nested subdirectories of arbitrary depth, where any subdirectory
-can be interpreted as a (sub)group to manage large collections easily.
+\&\fIhelp\fR prints short usage information and refers to this manual page.
+.SH	NOTES
+Using \fIln\fR\|(1) entries can be symlinked to indicate multiple entries
+share the same passphrase or to create shortcuts to frequently used entries.
 .PP
-This allows for transparent integration with \fIgit\fR\|(1) for example to keep
-track of changes and/or add comments while editing passwords.
-.PP
-Using \fIln\fR\|(1) entries can be symlinked to indicate multiple accounts or
-users share the same passphrase or create shortcuts to frequently used
-entries for example.
-.PP
-\&\fIlist\fR followed by a directory path, that is a group name, lists all
-entries inside the specified group as well as all its subgroups. If not
-name is given, all entries will be listed. Passing \fI\-g\fR as first
-parameter causes it to list groups only.
-.PP
-\&\fIhelp\fR prints information about how to use spm.
+This file based structure is perfectly suited for \fIgit\fR\|(1) in order to
+keep track of who changed what entry and when, add comments or much more.
 .SH	EXIT STATUS
 spm returns 1 if an error occured otherwise 0.
 .SH	ENVIRONMENT
