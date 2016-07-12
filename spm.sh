@@ -64,7 +64,10 @@ add() {
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
 
-	mkdir -p "${STORE_DIR}"/"${1%/*}"/
+	group=${1%/*}
+	[ "${group}" = "${1}" ] && group=
+
+	mkdir -p "${STORE_DIR}"/"${group}"/
 	printf '%s\n' "${password}" \
 		| gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
