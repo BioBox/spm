@@ -53,7 +53,7 @@ _search() {
 }
 
 view() {
-	sed s/.gpg//g | less -E -i -K -R -X
+	sed -e s/.gpg//g | less -E -i -K -R -X
 }
 
 ## Commands
@@ -87,7 +87,9 @@ del() {
 }
 
 search() {
-	_search "${1}" | view
+	_search "${1}" \
+		| sed -e s"^${STORE_DIR}/" \
+		| view
 }
 
 show() {

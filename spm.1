@@ -1,4 +1,4 @@
-.TH spm 1 2016-06-30 spm-1.4.5 "Commands Manual"
+.TH spm 1 2016-07-16 spm-1.4.5 "Commands Manual"
 .SH	NAME
 spm \- simple password manager
 .SH	SYNOPSIS
@@ -102,6 +102,12 @@ Show all entries matching the pattern 'sys':
 .PP
 .Vb 1
 \&	$ spm search sys
+.Ve
+.PP
+Get the first password among all matching the given pattern:
+.PP
+.Vb 1
+\&	$ spm get $(spm search sys | head -n1)
 .Ve
 .SH	SEE ALSO
 \&\fIgit\fR\|(1), \fIgpg2\fR\|(1), \fIln\fR\|(1), \fIpwgen\fR\|(1), \fItpm\fR\|(1), \fIxclip\fR\|(1)
