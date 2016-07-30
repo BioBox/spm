@@ -64,7 +64,7 @@ add() {
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
 
-	group=${1%/*}
+	group="${1%/*}"
 	[ "${group}" = "${1}" ] && group=
 
 	mkdir -p "${STORE_DIR}"/"${group}"/
