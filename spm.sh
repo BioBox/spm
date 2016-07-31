@@ -24,16 +24,21 @@ STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 
 ## Helper
 
-abort() {
-	printf 'Error: %s.\n' "${1}" 1>&2
-	exit 1
+usage() {
+	cat 1>&2 <<-EOF
+	${1:+Error:	${1}}
+	USAGE:	spm add|del|list [-g]|search|show|help [ENTRY|GROUP]
+	See spm(1) for more information.
+	EOF
+
+	exit ${1:+1}
 }
 
 check() {
-	[ -z "${entry}" ] && abort 'No such entry'
+	[ -z "${entry}" ] && usage 'No such entry'
 
 	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-		&& abort "Too ambigious keyword. Try 'spm search'"
+		&& usage "Too ambigious keyword. Try 'spm search'"
 }
 
 gpg() {
@@ -45,7 +50,7 @@ gpg() {
 readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
-	[ -z "${2}" ] && abort 'No password specified'
+	[ -z "${2}" ] && usage 'No password specified'
 }
 
 _search() {
@@ -59,7 +64,7 @@ view() {
 ## Commands
 
 add() {
-	[ -e "${STORE_DIR}"/"${1}".gpg ] && abort 'Entry already exists'
+	[ -e "${STORE_DIR}"/"${1}".gpg ] && usage 'Entry already exists'
 
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
@@ -73,7 +78,7 @@ add() {
 }
 
 list() {
-	[ -d "${STORE_DIR}"/"${1:-}" ] || abort "No such group. See 'spm list'"
+	[ -d "${STORE_DIR}"/"${1:-}" ] || usage "No such group. See 'spm list'"
 
 	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
 			-- "${STORE_DIR}"/"${1:-}" \
@@ -102,11 +107,11 @@ show() {
 
 [ ${#} -eq 0 ] || [ ${#} -gt 3 ] \
 || [ ${#} -eq 3 ] && [ "${1}" != list ] \
-	&& abort "Invalid number of arguments. See 'spm help'"
+	&& usage 'Invalid number of arguments'
 
 case "${1}" in
 	add|del|search|show)
-		[ -z "${2}" ] && abort 'Name must not be empty'
+		[ -z "${2}" ] && usage 'Name must not be empty'
 		${1}	"${2}"
 		;;
 	list)
@@ -114,13 +119,9 @@ case "${1}" in
 		list	"${2}"
 		;;
 	help)
-		cat <<- EOF
-		USAGE:	spm add|del|list [-g]|search|show|help [ENTRY|GROUP]
-
-		See spm(1) for more information.
-		EOF
+		usage
 		;;
 	*)
-		abort	"Invalid command. See 'spm help'"
+		usage	'Invalid command'
 		;;
 esac
