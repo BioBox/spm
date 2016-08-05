@@ -53,8 +53,9 @@ readpw() {
 	[ -z "${2}" ] && usage 'Empty password'
 }
 
-_search() {
-	find "${STORE_DIR}"/ \( -type f -o -type l \) -iwholename "*${1}*".gpg
+_find() {
+	find "${STORE_DIR}"/ \( -type f -o -type l \) -iwholename "*${1}*".gpg \
+		-printf "${2:-%p\n}"
 }
 
 view() {
@@ -86,19 +87,18 @@ list() {
 }
 
 del() {
-	entry=$(_search "${1}" | head -n2)
+	entry=$(_find "${1}" | head -n2)
 	check
 	rm -i "${entry}"; printf '\n'
 }
 
 search() {
-	_search "${1}" \
-		| sed -e s^"${STORE_DIR}"/ \
+	_find "${1}" '%P\n' \
 		| view
 }
 
 show() {
-	entry=$(_search "${1}" | head -n2)
+	entry=$(_find "${1}" | head -n2)
 	check
 	gpg --decrypt "${entry}"
 }
