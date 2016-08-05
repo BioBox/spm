@@ -38,7 +38,7 @@ check() {
 	[ -z "${entry}" ] && usage 'No such entry'
 
 	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
-		&& usage "Too ambigious keyword. Try 'spm search'"
+		&& usage "Ambigious keyword. Try 'spm search'"
 }
 
 gpg() {
@@ -50,7 +50,7 @@ gpg() {
 readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
-	[ -z "${2}" ] && usage 'No password specified'
+	[ -z "${2}" ] && usage 'Empty password'
 }
 
 _search() {
@@ -80,7 +80,7 @@ add() {
 list() {
 	[ -d "${STORE_DIR}"/"${1:-}" ] || usage "No such group. See 'spm list'"
 
-	tree ${grps_only:+-d} --noreport -l --dirsfirst --sort=name -C \
+	tree ${groups_only:+-d} --noreport -l --dirsfirst --sort=name -C \
 			-- "${STORE_DIR}"/"${1:-}" \
 		| view
 }
@@ -106,16 +106,19 @@ show() {
 ## Parse input
 
 [ ${#} -eq 0 ] || [ ${#} -gt 3 ] \
-|| [ ${#} -eq 3 ] && [ "${1}" != list ] \
-	&& usage 'Invalid number of arguments'
+|| [ ${#} -eq 3 -a "${1}" != list ] \
+	&& usage 'Wrong number of arguments'
 
 case "${1}" in
 	add|del|search|show)
-		[ -z "${2}" ] && usage 'Name must not be empty'
+		[ -z "${2}" ] && usage 'Empty name'
 		${1}	"${2}"
 		;;
 	list)
-		[ "${2}" = -g ] && grps_only=1 && shift 1
+		[ "${2}" = -g ] \
+			&& groups_only=1 && shift 1 \
+			|| [ ${#} -eq 3 ] \
+				&& usage 'Wrong number of arguments'
 		list	"${2}"
 		;;
 	help)
