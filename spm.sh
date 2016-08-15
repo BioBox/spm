@@ -115,10 +115,11 @@ case "${1}" in
 		${1}	"${2}"
 		;;
 	list)
-		[ "${2}" = -g ] \
-			&& groups_only=1 && shift 1 \
-			|| [ ${#} -eq 3 ] \
-				&& usage 'Wrong number of arguments'
+		if [ "${2}" = -g ] && [ ${#} -le 3 ]; then
+			groups_only=1 && shift 1
+		elif [ ${#} -gt 3 ]; then
+			usage 'Wrong number of arguments'
+		fi
 		list	"${2}"
 		;;
 	help)
