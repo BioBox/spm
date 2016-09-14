@@ -35,10 +35,10 @@ usage() {
 }
 
 check() {
-	[ -z "${entry}" ] && usage 'No such entry'
-
-	[ "$(printf '%s' "${entry}" | wc -l)" -gt 0 ] \
+	[ $(printf '%s' "${entry}" | wc -l) -gt 0 ] \
 		&& usage "Ambigious keyword. Try 'spm search'"
+
+	[ -z "${entry}" ] && usage 'No such entry'
 }
 
 gpg() {
