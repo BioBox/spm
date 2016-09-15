@@ -73,9 +73,9 @@ add() {
 	group="${1%/*}"
 	[ "${group}" = "${1}" ] && group=
 
-	mkdir -p "${STORE_DIR}"/"${group}"/
-	printf '%s\n' "${password}" \
-		| gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
+	mkdir -p "${STORE_DIR}"/"${group}"/ \
+		&& printf '%s\n' "${password}" \
+			| gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
 list() {
