@@ -38,7 +38,7 @@ check() {
 	[ $(printf '%s' "${entry}" | wc -l) -gt 0 ] \
 		&& usage "Ambigious keyword. Try 'spm search'"
 
-	[ -z "${entry}" ] && usage 'No such entry'
+	[ -n "${entry}" ] || usage 'No such entry'
 }
 
 gpg() {
@@ -88,19 +88,16 @@ list() {
 
 del() {
 	entry=$(_find "${1}" | head -n2)
-	check
-	rm -i "${entry}"; printf '\n'
+	check && rm -i "${entry}" && printf '\n'
 }
 
 search() {
-	_find "${1}" '%P\n' \
-		| view
+	_find "${1}" '%P\n' | view
 }
 
 show() {
 	entry=$(_find "${1}" | head -n2)
-	check
-	gpg --decrypt "${entry}"
+	check && gpg --decrypt "${entry}"
 }
 
 ## Parse input
@@ -116,7 +113,7 @@ case "${1}" in
 		;;
 	list)
 		if [ "${2}" = -g ] && [ ${#} -le 3 ]; then
-			groups_only=1 && shift 1
+			groups_only=1; shift 1
 		elif [ ${#} -gt 3 ]; then
 			usage 'Wrong number of arguments'
 		fi
