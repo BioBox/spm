@@ -103,7 +103,7 @@ show() {
 ## Parse input
 
 [ ${#} -eq 0 ] || [ ${#} -gt 3 ] \
-|| [ ${#} -eq 3 -a "${1}" != list ] \
+|| [ ${#} -eq 3 ] && [ "${1}" != list ] \
 	&& usage 'Wrong number of arguments'
 
 case "${1}" in
@@ -114,7 +114,7 @@ case "${1}" in
 	list)
 		if [ "${2}" = -g ] && [ ${#} -le 3 ]; then
 			groups_only=1; shift 1
-		elif [ ${#} -gt 3 ]; then
+		elif [ ${#} -gt 2 ]; then
 			usage 'Wrong number of arguments'
 		fi
 		list	"${2}"
