@@ -54,8 +54,8 @@ readpw() {
 }
 
 _find() {
-	find "${STORE_DIR}"/ \( -type f -o -type l \) -iwholename "*${1}*".gpg \
-		-printf "${2:-%p\n}"
+	find "${STORE_DIR}"/ \( -type f -o -type l \) -name \*.gpg \
+		| grep -G -i "${1}"
 }
 
 view() {
@@ -81,7 +81,7 @@ add() {
 list() {
 	[ -d "${STORE_DIR}"/"${1:-}" ] || usage "No such group. See 'spm list'"
 
-	tree ${groups_only:+-d} --noreport -l --dirsfirst --sort=name -C \
+	tree ${groups_only:+-d} -F \
 			-- "${STORE_DIR}"/"${1:-}" \
 		| view
 }

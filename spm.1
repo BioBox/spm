@@ -1,4 +1,4 @@
-.TH spm 1 2016-09-16 spm-1.4.7 "Commands Manual"
+.TH spm 1 2016-11-02 spm-1.4.7 "Commands Manual"
 .SH	NAME
 spm \- simple password manager
 .SH	SYNOPSIS
@@ -25,10 +25,12 @@ entries inside the specified group as well as all its subgroups. If no name is
 given, all entries will be listed. Passing \fI\-g\fR as first parameter causes
 it to list groups only.
 .PP
-Globbing is allowed for the \fIdel\fR, \fIsearch\fR and \fIshow\fR commands to
-avoid typing long entry names. In case multiple entries match, spm exits
-without removing or showing any password but printing a warning instead.
-Searching will show all matching paths.
+To avoid typing long entry names and make searching more effective, input for
+the \fIdel\fR, \fIsearch\fR and \fIshow\fR commands is treated as basic
+regular expression. In case multiple entries match, spm exits without removing
+or showing any password but printing a warning instead. Searching will show all
+matching paths.
+
 .PP
 \&\fIhelp\fR prints short usage information and refers to this manual page.
 .SH	NOTES
@@ -77,7 +79,7 @@ Write the entry's password that matches the given pattern to standard
 output:
 .PP
 .Vb 1
-\&	$ spm show em/r*t
+\&	$ spm show ^.+em/r[a-z]*t
 .Ve
 .PP
 Copy your 'system/root' password to the clipboard using \fIxclip\fR\|(1):
