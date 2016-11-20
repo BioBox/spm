@@ -55,7 +55,7 @@ readpw() {
 
 _find() {
 	find "${STORE_DIR}"/ \( -type f -o -type l \) -name \*.gpg \
-		| grep -G -i "${1}"
+		| grep -G -i "$(printf '%s' "${1}" | sed -e s/\$$/.gpg$/)"
 }
 
 view() {
