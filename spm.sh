@@ -1,6 +1,6 @@
 #!/bin/sh
 # Copyright (C) 2013-2016 Sören Tempel
-# Copyright (C) 2016 Klemens Nanni <kl3@posteo.org>
+# Copyright (C) 2016, 2017 Klemens Nanni <kl3@posteo.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,19 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+set -eu
 umask 077
 
 ## Variables
-
 GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 
 ## Helper
-
 usage() {
 	cat 1>&2 <<-EOF
-	${1:+Error:	${1}}
-	USAGE:	spm add|del|list [-g]|search|show|help [ENTRY|GROUP]
+	${1:+Error: ${1}}
+	USAGE: spm add|del|list [-g]|search|show|help [ENTRY|GROUP]
 	See spm(1) for more information.
 	EOF
 
@@ -35,94 +34,93 @@ usage() {
 }
 
 check() {
-	[ $(printf '%s' "${entry}" | wc -l) -gt 0 ] \
-		&& usage "Ambigious keyword. Try 'spm search'"
+	[ $(printf '%s' "${entry}" | wc -l) -eq 0 ] ||
+		usage 'ambigious expression'
 
-	[ -n "${entry}" ] || usage 'No such entry'
+	[ -n "${entry}" ] || usage 'no such entry'
 }
 
 gpg() {
-	[ -z "${PASSWORD_STORE_KEY}" ] \
-		&& gpg2 ${GPG_OPTS} --default-recipient-self "${@}" \
-		|| gpg2 ${GPG_OPTS} --recipient "${PASSWORD_STORE_KEY}" "${@}"
+	if [ -z "${PASSWORD_STORE_KEY}" ]; then
+		gpg2 ${GPG_OPTS} --default-recipient-self "${@}"
+	else
+		gpg2 ${GPG_OPTS} --recipient "${PASSWORD_STORE_KEY}" "${@}"
+	fi
 }
 
 readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
-	[ -z "${2}" ] && usage 'Empty password'
+	[ -z "${2}" ] && usage 'empty password'
 }
 
-_find() {
-	find "${STORE_DIR}"/ \( -type f -o -type l \) -name \*.gpg \
-		| grep -G -i "$(printf '%s' "${1}" | sed -e s/\$$/.gpg$/)"
+find() {
+	command find "${STORE_DIR}" \( -type f -o -type l \) -name \*.gpg |
+		sed -e s/\.gpg$// | grep -Gie "${1}"
 }
 
 view() {
-	sed -e s/.gpg//g | less -E -i -K -R -X
+	sed -e s/.gpg//g | less -EiKRX
 }
 
 ## Commands
-
 add() {
-	[ -e "${STORE_DIR}"/"${1}".gpg ] && usage 'Entry already exists'
+	[ -e "${STORE_DIR}"/"${1}".gpg ] && usage 'entry already exists'
 
+	password=
 	readpw "Password for '${1}': " password
 	[ -t 0 ] && printf '\n'
 
 	group="${1%/*}"
 	[ "${group}" = "${1}" ] && group=
 
-	mkdir -p "${STORE_DIR}"/"${group}"/ \
-		&& printf '%s\n' "${password}" \
-			| gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
+	mkdir -p "${STORE_DIR}"/"${group}" &&
+		printf '%s\n' "${password}" |
+			gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
 }
 
 list() {
-	[ -d "${STORE_DIR}"/"${1:-}" ] || usage "No such group. See 'spm list'"
+	[ -d "${STORE_DIR}"/"${1:-}" ] || usage 'no such group'
 
-	tree ${groups_only:+-d} -F \
-			-- "${STORE_DIR}"/"${1:-}" \
-		| view
+	tree ${gflag:+-d} -F -- "${STORE_DIR}"/"${1:-}" | view
 }
 
 del() {
-	entry=$(_find "${1}" | head -n2)
-	check && rm -i "${entry}" && printf '\n'
+	entry=$(find "${1}" | head -n2)
+	check; rm -i "${entry}" && printf '\n'
 }
 
 search() {
-	_find "${1}" '%P\n' | view
+	find "${1}" | view
 }
 
 show() {
-	entry=$(_find "${1}" | head -n2)
-	check && gpg --decrypt "${entry}"
+	entry="$(find "${1}" | head -n2)".gpg
+	check; gpg --decrypt "${entry}"
 }
 
 ## Parse input
-
-[ ${#} -eq 0 ] || [ ${#} -gt 3 ] \
-|| [ ${#} -eq 3 ] && [ "${1}" != list ] \
-	&& usage 'Wrong number of arguments'
+[ ${#} -eq 0 ] || [ ${#} -gt 3 ] ||
+[ ${#} -eq 3 ] && [ "${1:-}" != list ] &&
+	usage 'wrong number of arguments'
 
 case "${1}" in
 	add|del|search|show)
-		[ -z "${2}" ] && usage 'Empty name'
-		${1}	"${2}"
+		[ -z "${2:-}" ] && usage 'empty name'
+		${1} "${2}"
 		;;
 	list)
 		if [ "${2}" = -g ] && [ ${#} -le 3 ]; then
-			groups_only=1; shift 1
+			gflag=1; shift 1
 		elif [ ${#} -gt 2 ]; then
-			usage 'Wrong number of arguments'
+			usage 'too many arguments'
 		fi
-		list	"${2}"
+		list "${2}"
 		;;
 	help)
 		usage
 		;;
 	*)
-		usage	'Invalid command'
+		usage 'invalid command'
 		;;
 esac
