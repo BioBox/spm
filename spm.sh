@@ -26,7 +26,7 @@ STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 usage() {
 	cat 1>&2 <<-EOF
 	${1:+Error: ${1}}
-	USAGE: spm add|del|list [-g]|search|show|help [ENTRY|GROUP]
+	USAGE: ${0##*/} add|del|list [-g]|search|show|help [[group/]name|expression]
 	See spm(1) for more information.
 	EOF
 

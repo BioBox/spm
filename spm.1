@@ -1,115 +1,134 @@
-.TH spm 1 2016-11-02 spm-1.5.0 "Commands Manual"
-.SH	NAME
-spm \- simple password manager
-.SH	SYNOPSIS
-\&\fBspm\fR \fI\s-1COMMAND\s0\fR [\fI\s-1OPTION\s0\fR] [\fI\s-1ENTRY\s0\fR|\fI\s-1GROUP\s0\fR]
-.SH	DESCRIPTON
-spm is a single fully POSIX shell compliant script utilizing \fIgpg2\fR\|(1)
-in combination with basic tools such as \fIfind\fR\|(1) \fItree\fR\|(1).
-.PP
-spm stores everything in a directory structure where passwords correspond to
-individually \s-1PGP\s0 encrypted files, optionally residing inside nested
-subdirectories of arbitrary depth, where any subdirectory can be interpreted
-as a (sub)group to manage large collections easily.
-.SH	OPTIONS
-Adding, removing or showing a password is done by invoking spm with the
-\&\fIadd\fR, \fIdel\fR or \fIshow\fR commands respectively followed by a name.
-spm will then prompt for a password or confirmation before it modifies
-or shows the corresponding entry.
-.PP
-Basic searching is possible through the \fIsearch\fR command and will show
-matching menu entries accordingly.
-.PP
-\&\fIlist\fR followed by a directory path, that is a group name, lists all
-entries inside the specified group as well as all its subgroups. If no name is
-given, all entries will be listed. Passing \fI\-g\fR as first parameter causes
-it to list groups only.
-.PP
-To avoid typing long entry names and make searching more effective, input for
-the \fIdel\fR, \fIsearch\fR and \fIshow\fR commands is treated as basic
-regular expression. In case multiple entries match, spm exits without removing
-or showing any password but printing a warning instead. Searching will show all
-matching paths.
-
-.PP
-\&\fIhelp\fR prints short usage information and refers to this manual page.
-.SH	NOTES
-Using \fIln\fR\|(1) entries can be symlinked to indicate multiple entries
-share the same passphrase or to create shortcuts to frequently used entries.
-.PP
-This file based structure is perfectly suited for \fIgit\fR\|(1) in order to
-keep track of who changed what entry and when, add comments or much more.
-.SH	EXIT STATUS
-spm returns 1 if an error occured otherwise 0.
-.SH	ENVIRONMENT
-.TP
-PASSWORD_STORE_DIR
-The storage directory (default: ~/.spm/).
-.TP
-PASSWORD_STORE_KEY
-GPG key to encrypt files with (default: self).
-.SH	FILES
-.TP
-~/.spm/
-The default storage directory.
-.SH	STDOUT
-Prompts, entry names and passwords are written to the standard output.
-.SH	STDERR
-The standard error is used for diagnostic messages only.
-.SH	EXAMPLES
-Create a new entry with a random password using \fIpwgen\fR\|(1):
-.PP
-.Vb 1
-\&	$ pwgen \-1 | spm add system/new\-user
-.Ve
-.PP
-Create a new entry called 'system/root':
-.PP
-.Vb 1
-\&	$ spm add system/root
-.Ve
-.PP
-Write your 'system/root' password to standard output:
-.PP
-.Vb 1
-\&	$ spm show system/root
-.Ve
-.PP
-Write the entry's password that matches the given pattern to standard
-output:
-.PP
-.Vb 1
-\&	$ spm show ^.+em/r[a-z]*t
-.Ve
-.PP
-Copy your 'system/root' password to the clipboard using \fIxclip\fR\|(1):
-.PP
-.Vb 1
-\&	$ spm show system/root | tr \-d \*(Aq\en\*(Aq | xclip
-.Ve
-.PP
-List all entries of the group 'system':
-.PP
-.Vb 1
-\&	$ spm list system
-.Ve
-.PP
-List groups only:
-.PP
-.Vb 1
-\&	$ spm list \-g
-.Ve
-.PP
-Show all entries matching the pattern 'sys':
-.PP
-.Vb 1
-\&	$ spm search sys
-.Ve
-.PP
-Get the first password among all matching the given pattern:
-.PP
-.Vb 1
-\&	$ spm get $(spm search sys | head -n1)
-.Ve
-.SH	SEE ALSO
-\&\fIgit\fR\|(1), \fIgpg2\fR\|(1), \fIln\fR\|(1), \fIpwgen\fR\|(1), \fItpm\fR\|(1), \fIxclip\fR\|(1)
+.Dd March 22, 2017
+.Dt SPM 1
+.Os
+.Sh NAME
+.Nm spm
+.Nd simple password manager
+.Sh SYNOPSIS
+.Nm Cm add Oo Ar group/ Oc Ns Ar name
+.Nm Cm del Ar expression
+.Nm Cm list Oo Fl g Oc Op Ar group
+.Nm Cm search Ar expression
+.Nm Cm show Ar expression
+.Sh DESCRIPTION
+.Nm
+is a single fully POSIX shell compliant script using
+.Xr gpg2 1
+for encryption.
+.sp
+Entries are stored in a classical filesystem hierarchy where passwords
+are encrypted as individual files and directories may be used as groups.
+This enables users to control access through file ownership, manage
+shared password with symbolic links and more just like any other files.
+.sp
+Command line agruments, that is group and entry paths, are considered to
+be relative to the storage root. Except when creating or listing
+entries,
+.Ar expression
+is expected to be a basic regular expression as defined in
+.Xr re_format 7 .
+This is not only helpful but also required to provide means of
+distinguishing ambigious entry names. The following commands are
+available:
+.Bl -tag -width Ds
+.It Cm add
+Prompt for a password if standard output is a terminal otherwise read
+from standard input and store it as entry
+.Ar name .
+If
+.Ar name
+contains forward slashes, the entry is put within the respective group.
+Non-existing groups are created automatically.
+.It Cm del
+Ask for confirmation and delete the entry matching
+.Ar expression
+on success.
+.It Cm list
+Print a recursive, indented tree-style list of all entries in group
+.Ar group
+If the
+.Fl g
+flag is passed only subgroups are shown. If
+.Ar group
+is omitted, the entire storage root is listed.
+.It Cm search
+Print the absoloute paths of all entries matching
+.Ar expression
+one per line.
+.It Cm show
+Print the password to standard output if
+.Ar expression
+uniquely matches an entry and prompt for the decryption passphrase if
+it is not cached by
+.Xr gpg-agent 1 .
+.El
+.Sh ENVIRONMENT
+The following environment variables will be used by
+.Nm
+if they are set and not empty:
+.Bl -tag -width Ds
+.It Ev PASSWORD_STORE_DIR
+The storage root directory. This should be an absoloute path.
+.It Ev PASSWORD_STORE_KEY
+Key ID used for de/encryption. Refer to
+.Xr gpg2 1
+for accepted formats.
+.El
+.Sh FILES
+.Bl -tag -width Ds
+.It Pa ~/.spm/
+The default storage root directory.
+.El
+.Sh EXIT STATUS
+.Ex
+.Sh EXAMPlES
+Add Alice's password to the group
+.Em users :
+.Bd -literal -offset indent
+$ spm add users/alice
+Password for 'users/alice':
+.Ed
+.sp
+Make sure she is an admin as well:
+.Em 
+.Bd -literal -offset indent
+$ (cd ~/.spm
+> mkdir admins
+> ln -s ../members/alice admins/alice)
+.Ed
+.sp
+Copy her password into the X selection ready to be pasted somewhere:
+.Bd -literal -offset indent
+$ spm show admins/alice | xclip -i
+.Ed
+.sp
+Find all admins starting with
+.Dq a
+or
+.Dq b :
+.Bd -literal -offset indent
+$ spm search admins/[ab]
+/home/alice/.spm/admins/alice
+/home/alice/.spm/admins/bob
+.Ed
+.sp
+List all users:
+.Bd -literal -offset indent
+$ spm list users
+/home/alice/.spm/users
+|-- alice
+|-- bob
+|-- temporary/
+|   |-- tim
+|   `-- tom
+.Ed
+.Sh SEE ALSO
+.Xr gpg2 1 ,
+.Xr gpg-agent 1 ,
+.Xr tpm 1 ,
+.Xr tree 1 ,
+.Xr re_format 7
+.Sh AUTHORS
+.Nm
+is written by
+.An Klemens Nanni Aq Mt kl3@posteo.org .
