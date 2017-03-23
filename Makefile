@@ -1,5 +1,5 @@
 # Copyright (C) 2013-2016 Sören Tempel
-# Copyright (C) 2016 Klemens Nanni <kl3@posteo.org>
+# Copyright (C) 2016, 2017 Klemens Nanni <kl3@posteo.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,17 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-VERSION = 1.5.0
-PREFIX ?= /usr/local
-BINDIR ?= $(PREFIX)/bin
-MANDIR ?= $(PREFIX)/share/man
+PREFIX = /usr/local
+BINDIR = $(PREFIX)/bin
+MANDIR = $(PREFIX)/share/man
 
 install:
-	install -Dm755 spm.sh "$(DESTDIR)$(BINDIR)/spm"
-	install -Dm644 spm.1 "$(DESTDIR)$(MANDIR)/man1/spm.1"
+	install -Dm755 spm   $(DESTDIR)$(BINDIR)/spm
+	install -Dm644 spm.1 $(DESTDIR)$(MANDIR)/man1/spm.1
 
 uninstall:
-	$(RM) "$(DESTDIR)$(BINDIR)/spm" \
-		"$(DESTDIR)$(MANDIR)/man1/spm.1"
+	rm -f $(DESTDIR)$(BINDIR)/spm \
+	      $(DESTDIR)$(MANDIR)/man1/spm.1
 
 .PHONY: install uninstall
