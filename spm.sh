@@ -55,8 +55,7 @@ readpw() {
 }
 
 find() {
-	command find "${STORE_DIR}" \( -type f -o -type l \) |
-		grep -Gie "${1}"
+	command find "${STORE_DIR}" -type f -o -type l | grep -Gie "${1}"
 }
 
 view() {
