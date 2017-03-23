@@ -55,17 +55,17 @@ readpw() {
 }
 
 find() {
-	command find "${STORE_DIR}" \( -type f -o -type l \) -name \*.gpg |
-		sed -e s/\.gpg$// | grep -Gie "${1}"
+	command find "${STORE_DIR}" \( -type f -o -type l \) |
+		grep -Gie "${1}"
 }
 
 view() {
-	sed -e s/.gpg//g | less -EiKRX
+	less -EiKRX
 }
 
 ## Commands
 add() {
-	[ -e "${STORE_DIR}"/"${1}".gpg ] && usage 'entry already exists'
+	[ -e "${STORE_DIR}"/"${1}" ] && usage 'entry already exists'
 
 	password=
 	readpw "Password for '${1}': " password
@@ -76,13 +76,13 @@ add() {
 
 	mkdir -p "${STORE_DIR}"/"${group}" &&
 		printf '%s\n' "${password}" |
-			gpg --encrypt --output "${STORE_DIR}"/"${1}".gpg
+			gpg --encrypt --output "${STORE_DIR}"/"${1}"
 }
 
 list() {
 	[ -d "${STORE_DIR}"/"${1:-}" ] || usage 'no such group'
 
-	tree ${gflag:+-d} -F -- "${STORE_DIR}"/"${1:-}" | view
+	tree ${gflag:+-d} -Fx -- "${STORE_DIR}"/"${1:-}" | view
 }
 
 del() {
@@ -95,7 +95,7 @@ search() {
 }
 
 show() {
-	entry="$(find "${1}" | head -n2)".gpg
+	entry=$(find "${1}" | head -n2)
 	check; gpg --decrypt "${entry}"
 }
 
@@ -110,12 +110,12 @@ case "${1}" in
 		${1} "${2}"
 		;;
 	list)
-		if [ "${2}" = -g ] && [ ${#} -le 3 ]; then
+		if [ "${2:-}" = -g ] && [ ${#} -le 3 ]; then
 			gflag=1; shift 1
 		elif [ ${#} -gt 2 ]; then
 			usage 'too many arguments'
 		fi
-		list "${2}"
+		list "${2:-}"
 		;;
 	help)
 		usage
