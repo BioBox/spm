@@ -1,12 +1,13 @@
-.Dd March 22, 2017
+.Dd March 24, 2017
 .Dt SPM 1
 .Os
 .Sh NAME
 .Nm spm
 .Nd simple password manager
 .Sh SYNOPSIS
-.Nm Cm add Oo Ar group/ Oc Ns Ar name
+.Nm Cm add Oo Ar group/ Oc Ns Ar entry
 .Nm Cm del Ar expression
+.Nm Cm help
 .Nm Cm list Oo Fl g Oc Op Ar group
 .Nm Cm search Ar expression
 .Nm Cm show Ar expression
@@ -18,39 +19,39 @@ for encryption.
 .sp
 Entries are stored in a classical filesystem hierarchy where passwords
 are encrypted as individual files and directories may be used as groups.
-This enables users to control access through file ownership, manage
-shared password with symbolic links and more just like any other files.
+This way users can control access through file ownership, share entries
+entries with symbolic links and more just like any other files.
 .sp
-Command line agruments, that is group and entry paths, are considered to
-be relative to the storage root. Except when creating or listing
-entries,
+Group and entry names or expressions are considered relative to the storage
+root directoy.
 .Ar expression
-is expected to be a basic regular expression as defined in
+is interpreted as basic regular expression according to
 .Xr re_format 7 .
-This is not only helpful but also required to provide means of
-distinguishing ambigious entry names. The following commands are
-available:
+The following commands are available:
 .Bl -tag -width Ds
 .It Cm add
 Prompt for a password if standard output is a terminal otherwise read
-from standard input and store it as entry
-.Ar name .
+from standard input and store it as
+.Ar entry .
 If
-.Ar name
-contains forward slashes, the entry is put within the respective group.
-Non-existing groups are created automatically.
+.Ar group
+is specified, non-existing groups are created automatically and the
+password is stored under
+.Ar group/ Ns Op Ar ../ .
 .It Cm del
 Ask for confirmation and delete the entry matching
 .Ar expression
 on success.
+.It Cm help
+Print a short usage and refer to this manual page.
 .It Cm list
-Print a recursive, indented tree-style list of all entries in group
+Print a recursive, indented tree-style list of all entries in
+.Ar group .
+If
 .Ar group
-If the
+is omitted, the entire storage root is listed. If the
 .Fl g
-flag is passed only subgroups are shown. If
-.Ar group
-is omitted, the entire storage root is listed.
+flag is passed only subgroups are shown.
 .It Cm search
 Print the absoloute paths of all entries matching
 .Ar expression
@@ -128,6 +129,18 @@ $ spm list users
 .Xr tpm 1 ,
 .Xr tree 1 ,
 .Xr re_format 7
+.Sh CAVEATS
+Groups have to be deleted manually using
+.Xr rmdir 1 .
+.sp
+Entry paths containing
+.Pa ..
+may allow users to add or list files outside the storage root directory.
+.Bd -literal -offset indent
+$ spm list ..
+/home/kle/alice/.spm/..
+[...]
+.Ed
 .Sh AUTHORS
 .Nm
 is written by
