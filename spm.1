@@ -123,7 +123,14 @@ $ spm list users
 |   |-- tim
 |   `-- tom
 .Ed
+.sp
+Find entries interactively using
+.Xr dmenu 1 :
+.Bd -literal -offset indent
+$ spm show "$(spm search . | dmenu -l 10)"
+.Ed
 .Sh SEE ALSO
+.Xr dmenu 1,
 .Xr gpg2 1 ,
 .Xr gpg-agent 1 ,
 .Xr tpm 1 ,
