@@ -1,19 +1,24 @@
-.Dd March 24, 2017
+.Dd March 27, 2017
 .Dt SPM 1
-.Os
 .Sh NAME
 .Nm spm
 .Nd simple password manager
 .Sh SYNOPSIS
-.Nm Cm add Oo Ar group/ Oc Ns Ar entry
-.Nm Cm del Ar expression
-.Nm Cm help
-.Nm Cm list Oo Fl g Oc Op Ar group
-.Nm Cm search Ar expression
-.Nm Cm show Ar expression
+.Nm
+.Cm add Oo Ar group/ Oc Ns Ar entry
+.Nm
+.Cm del Ar expression
+.Nm
+.Cm help
+.Nm
+.Cm list Oo Fl g Oc Op Ar group
+.Nm
+.Cm search Ar expression
+.Nm
+.Cm show Ar expression
 .Sh DESCRIPTION
 .Nm
-is a single fully POSIX shell compliant script using
+is a fully POSIX shell compliant script using
 .Xr gpg2 1
 for encryption.
 .sp
@@ -22,8 +27,8 @@ are encrypted as individual files and directories may be used as groups.
 This way users can control access through file ownership, share entries
 entries with symbolic links and more just like any other files.
 .sp
-Group and entry names or expressions are considered relative to the storage
-root directoy.
+Group and entry names or expressions are considered relative to the
+storage root directoy.
 .Ar expression
 is interpreted as basic regular expression according to
 .Xr re_format 7 .
@@ -49,7 +54,8 @@ Print a recursive, indented tree-style list of all entries in
 .Ar group .
 If
 .Ar group
-is omitted, the entire storage root is listed. If the
+is omitted, the entire storage root is listed.
+If the
 .Fl g
 flag is passed only subgroups are shown.
 .It Cm search
@@ -61,7 +67,8 @@ Print the password to standard output if
 .Ar expression
 uniquely matches an entry and prompt for the decryption passphrase if
 it is not cached by
-.Xr gpg-agent 1 .
+.Xr gpg-agent 1
+already.
 .El
 .Sh ENVIRONMENT
 The following environment variables will be used by
@@ -69,9 +76,11 @@ The following environment variables will be used by
 if they are set and not empty:
 .Bl -tag -width Ds
 .It Ev PASSWORD_STORE_DIR
-The storage root directory. This should be an absoloute path.
+The storage root directory.
+This should be an absoloute path.
 .It Ev PASSWORD_STORE_KEY
-Key ID used for de/encryption. Refer to
+Key ID used for de/encryption.
+Refer to
 .Xr gpg2 1
 for accepted formats.
 .El
@@ -81,7 +90,8 @@ for accepted formats.
 The default storage root directory.
 .El
 .Sh EXIT STATUS
-.Ex
+.Nm
+exits 1 if an error occurs otherwise 0.
 .Sh EXAMPlES
 Add Alice's password to the group
 .Em users :
@@ -91,7 +101,6 @@ Password for 'users/alice':
 .Ed
 .sp
 Make sure she is an admin as well:
-.Em 
 .Bd -literal -offset indent
 $ (cd ~/.spm
 > mkdir admins
