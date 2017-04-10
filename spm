@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 set -eu
-umask 077
+umask u=rwX,og=
 
 ## Variables
 GPG_OPTS='--quiet --yes --batch'
@@ -34,10 +34,10 @@ usage() {
 }
 
 check() {
+	[ -n "${entry}" ] || usage 'no such entry'
+
 	[ $(printf '%s' "${entry}" | wc -l) -eq 0 ] ||
 		usage 'ambigious expression'
-
-	[ -n "${entry}" ] || usage 'no such entry'
 }
 
 gpg() {
