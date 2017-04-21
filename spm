@@ -58,9 +58,7 @@ find() {
 	command find "${STORE_DIR}" -type f -o -type l | grep -Gie "${1}"
 }
 
-view() {
-	less -EiKRX
-}
+alias view='less -EiKRX'
 
 ## Commands
 add() {
@@ -86,7 +84,7 @@ list() {
 
 del() {
 	entry=$(find "${1}" | head -n2)
-	check; rm -i "${entry}" && printf '\n'
+	check; command rm -i "${entry}" && printf '\n'
 }
 
 search() {
@@ -104,22 +102,19 @@ show() {
 	usage 'wrong number of arguments'
 
 case "${1}" in
-	add|del|search|show)
-		[ -z "${2:-}" ] && usage 'empty name'
-		${1} "${2}"
-		;;
-	list)
-		if [ "${2:-}" = -g ] && [ ${#} -le 3 ]; then
-			gflag=1; shift 1
-		elif [ ${#} -gt 2 ]; then
-			usage 'too many arguments'
-		fi
-		list "${2:-}"
-		;;
-	help)
-		usage
-		;;
-	*)
-		usage 'invalid command'
-		;;
+add|del|search|show)
+	[ -z "${2:-}" ] && usage 'empty name'
+	${1} "${2}"
+	;;
+list)
+	[ "${2:-}" = -g ] && gflag=1 && shift 1
+	[ ${#} -gt 2 ] && usage 'too many arguments'
+	list "${2:-}"
+	;;
+help)
+	usage
+	;;
+*)
+	usage 'invalid command'
+	;;
 esac
