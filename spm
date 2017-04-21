@@ -58,6 +58,17 @@ find() {
 	command find "${STORE_DIR}" -type f -o -type l | grep -Gie "${1}"
 }
 
+munge() {
+	abspath="$(readlink -f "${STORE_DIR}"/"${1}")"
+	case "${abspath}" in
+	"${STORE_DIR}"*)
+		eval ${2}=\"${abspath#${STORE_DIR}}\"
+		;;
+	*)
+		usage 'bad traversal'
+	esac
+}
+
 alias view='less -EiKRX'
 
 ## Commands
@@ -109,7 +120,8 @@ add|del|search|show)
 list)
 	[ "${2:-}" = -g ] && gflag=1 && shift 1
 	[ ${#} -gt 2 ] && usage 'too many arguments'
-	list "${2:-}"
+	[ -n "${2:-}" ] && munge "${2}" relpath
+	list "${relpath:-}"
 	;;
 help)
 	usage

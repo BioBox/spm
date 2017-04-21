@@ -1,4 +1,4 @@
-.Dd March 27, 2017
+.Dd April 21, 2017
 .Dt SPM 1
 .Sh NAME
 .Nm spm
@@ -148,15 +148,6 @@ $ spm show "$(spm search . | dmenu -l 10)"
 .Sh CAVEATS
 Groups have to be deleted manually using
 .Xr rmdir 1 .
-.sp
-Entry paths containing
-.Pa ..
-may allow users to add or list files outside the storage root directory.
-.Bd -literal -offset indent
-$ spm list ..
-/home/kle/alice/.spm/..
-[...]
-.Ed
 .Sh AUTHORS
 .Nm
 is written by
