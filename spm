@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 set -eu
-umask u=rw,go=
+umask u=rwx,go=
 
 ## Variables
 GPG_OPTS='--quiet --yes --batch'
