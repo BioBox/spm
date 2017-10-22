@@ -69,7 +69,9 @@ munge() {
 	esac
 }
 
-alias view='less -EiKRX'
+view() {
+	less -EiKRX
+}
 
 ## Commands
 add() {
