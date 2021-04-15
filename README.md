@@ -13,6 +13,8 @@ flexible and powerful management tools.
 Refer to the manual page for various examples or read its source code to see
 how it works.
 
+This Fork aims to make it more POSIX compliant, without any major changes to the script.
+
 ----
 
 spm started as [tpm](https://github.com/nmeum/tpm) fork.
