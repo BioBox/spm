@@ -52,7 +52,7 @@ readpw() {
 	[ -t 0 ] && stty -echo && printf '%s' "${1}"
 	IFS= read -r "${2}"
 	[ -t 0 ] && stty echo
-	[ -z "${2}" ] && usage 'empty password'
+	[ -n "$(eval echo \"\$$2\")" ] || usage 'empty password'
 }
 
 find() {
