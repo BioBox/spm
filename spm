@@ -20,7 +20,6 @@ set -eu
 umask u=rwx,go=
 
 ## Variables
-GPG_OPTS='--quiet --yes --batch'
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 
 ## Helper
@@ -41,12 +40,8 @@ check() {
 		usage 'ambigious expression'
 }
 
-gpg() {
-	if [ -z "${PASSWORD_STORE_KEY}" ]; then
-		gpg2 ${GPG_OPTS} --default-recipient-self "${@}"
-	else
-		gpg2 ${GPG_OPTS} --recipient "${PASSWORD_STORE_KEY}" "${@}"
-	fi
+age() {
+	age --recipient "${PASSWORD_STORE_KEY}" "${@}"
 }
 
 readpw() {
@@ -88,7 +83,7 @@ add() {
 
 	mkdir -p "${STORE_DIR}"/"${group}" &&
 		printf '%s\n' "${password}" |
-			gpg --encrypt --output "${STORE_DIR}"/"${1}"
+			age --encrypt --output "${STORE_DIR}"/"${1}"
 }
 
 list() {
@@ -103,7 +98,7 @@ search() {
 
 show() {
 	entry=$(find "${1}")
-	check; gpg --decrypt "${entry}"
+	check; age --decrypt "${entry}"
 }
 
 ## Parse input
