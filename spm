@@ -27,7 +27,7 @@ STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
 usage() {
 	cat 1>&2 <<-EOF
 	${1:+Error: ${1}}
-	USAGE: ${0##*/} add|del|list [-g]|search|show|help [[group/]entry|expression]
+	USAGE: ${0##*/} add|list [-g]|search|show|help [[group/]entry|expression]
 	See spm(1) for more information.
 	EOF
 
@@ -97,11 +97,6 @@ list() {
 	tree ${gflag:+-d} -Fx -- "${STORE_DIR}"/"${1:-}" | view
 }
 
-del() {
-	entry=$(find "${1}" | head -n2)
-	check; command rm -i "${entry}" && printf '\n'
-}
-
 search() {
 	find "${1}" | view
 }
@@ -117,7 +112,7 @@ show() {
 	usage 'wrong number of arguments'
 
 case "${1}" in
-add|del|search|show)
+add|search|show)
 	[ -z "${2:-}" ] && usage 'empty name'
 	${1} "${2}"
 	;;
