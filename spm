@@ -57,7 +57,7 @@ readpw() {
 }
 
 find() {
-	command find "${STORE_DIR}" -type f -o -type l | grep -ie "${1}"
+	command find "${STORE_DIR}" -type f -o -type l | grep -ie "${1}" | head -n 1
 }
 
 munge() {
@@ -102,7 +102,7 @@ search() {
 }
 
 show() {
-	entry=$(find "${1}" | head -n2)
+	entry=$(find "${1}")
 	check; gpg --decrypt "${entry}"
 }
 
