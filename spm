@@ -66,7 +66,7 @@ view() {
 }
 
 edit() {
-    [ -f "${1}.rage" ] || die "Failed to access ${1}"
+    [ -f "${1}" ] || die "Failed to access ${1}"
 
     # we use /dev/shm because it's an in-memory
     # space that we can use to store private data,
