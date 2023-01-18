@@ -35,7 +35,7 @@ check() {
 }
 
 rage() {
-	rage --recipient "${PASSWORD_STORE_KEY}" "${@}"
+	command rage -i "${AGE_PUBLIC_KEY}" "${@}"
 }
 
 readpw() {
