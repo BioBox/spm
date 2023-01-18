@@ -21,6 +21,7 @@ umask u=rwx,go=
 
 ## Variables
 STORE_DIR="${PASSWORD_STORE_DIR:-${HOME}/.spm}"
+AGE_PUBLIC_KEY="${AGE_KEY_FILE:-${HOME}/.key.age}"
 
 die() {
     echo "${1}" >&2
