@@ -118,7 +118,7 @@ search() {
 }
 
 show() {
-	entry=$(find "${1}")
+	entry=$STORE_DIR/"${1}"
 	check; rage --decrypt "${entry}"
 }
 
