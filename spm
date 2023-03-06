@@ -127,6 +127,9 @@ show() {
 [ ${#} -eq 3 ] && [ "${1:-}" != list ] &&
 	die 'wrong number of arguments'
 
+# Check for rage key
+[ -r $AGE_PUBLIC_KEY ] || die 'Age key does not exist'
+
 case "${1}" in
 add|search|show)
 	[ -z "${2:-}" ] && die 'empty name'
